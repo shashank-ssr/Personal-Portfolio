@@ -20,11 +20,17 @@ import {
 } from "./data/portfolio";
 import { openEmailWithFallback } from "./utils/openEmailWithFallback";
 
-const revealProps = {
+const desktopRevealProps = {
   initial: { opacity: 0, y: 40, rotate: -2 },
   whileInView: { opacity: 1, y: 0, rotate: 0 },
   viewport: { once: true, amount: 0.2 },
   transition: { type: "spring", stiffness: 140, damping: 18, duration: 0.55 },
+};
+
+const mobileRevealProps = {
+  initial: { opacity: 0, y: 22 },
+  animate: { opacity: 1, y: 0 },
+  transition: { type: "spring", stiffness: 170, damping: 20, duration: 0.42 },
 };
 
 const floatingNotes = [
@@ -57,28 +63,27 @@ export default function App() {
   const [activeProjectId, setActiveProjectId] = useState(projects[0].id);
   const [isDark, setIsDark] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
 
   const activeProject = projects.find((project) => project.id === activeProjectId) ?? projects[0];
+  const revealProps = isMobileViewport ? mobileRevealProps : desktopRevealProps;
 
   useEffect(() => {
-    document.body.classList.toggle("menu-open", isMobileMenuOpen);
+    const syncViewportState = () => {
+      const isMobile = window.innerWidth < 768;
 
-    return () => {
-      document.body.classList.remove("menu-open");
-    };
-  }, [isMobileMenuOpen]);
+      setIsMobileViewport(isMobile);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 768) {
+      if (!isMobile) {
         setIsMobileMenuOpen(false);
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    syncViewportState();
+    window.addEventListener("resize", syncViewportState);
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", syncViewportState);
     };
   }, []);
 
@@ -111,7 +116,7 @@ export default function App() {
       <div className="paper-texture min-h-screen overflow-x-clip text-black transition-colors duration-300">
         <div className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
           <motion.header
-            className="brutal-card sticky top-4 z-40 mb-8 flex flex-col gap-4 bg-white px-4 py-4 lg:flex-row lg:items-center lg:justify-between"
+            className="brutal-card relative z-40 mb-6 bg-white px-4 py-4 md:sticky md:top-4 md:mb-8"
             initial={{ y: -18, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.4 }}
@@ -119,134 +124,128 @@ export default function App() {
             <Tape position="left" />
             <Tape position="right" />
 
-            <div className="shrink-0">
-              <p className="font-mono text-[11px] uppercase tracking-[0.3em]">Shashank Singh Portfolio</p>
-              <h1 className="font-display text-2xl uppercase leading-none sm:text-3xl">Full Stack Developer / MERN Stack</h1>
-            </div>
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="shrink-0 pr-2">
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] sm:text-[11px]">Shashank Singh Portfolio</p>
+                <h1 className="mt-1 font-display text-xl uppercase leading-none sm:text-2xl lg:text-3xl">
+                  Full Stack Developer / MERN Stack
+                </h1>
+              </div>
 
-            <nav className="hidden flex-wrap items-center gap-2 md:flex">
-              {navItems.map((item) => (
+              <nav className="hidden flex-wrap items-center gap-2 md:flex">
+                {navItems.map((item) => (
+                  <motion.button
+                    key={item.id}
+                    type="button"
+                    onClick={() => scrollToSection(item.id)}
+                    whileHover={{ scale: 1.05, rotate: 1 }}
+                    whileTap={{ scale: 0.97, y: 2 }}
+                    className="border-4 border-black bg-[#ffe600] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000] transition-transform"
+                  >
+                    {item.label}
+                  </motion.button>
+                ))}
+              </nav>
+
+              <div className="hidden items-center gap-2 md:flex">
                 <motion.button
-                  key={item.id}
                   type="button"
-                  onClick={() => scrollToSection(item.id)}
-                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  onClick={() => setIsDark((value) => !value)}
+                  whileHover={{ scale: 1.05, rotate: -1 }}
                   whileTap={{ scale: 0.97, y: 2 }}
-                  className="border-4 border-black bg-[#ffe600] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000] transition-transform"
+                  className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
+                  aria-pressed={isDark}
                 >
-                  {item.label}
+                  {isDark ? "Light Mode" : "Dark Mode"}
                 </motion.button>
-              ))}
-            </nav>
-
-            <div className="flex items-center gap-2 self-end md:self-auto">
-              <motion.button
-                type="button"
-                onClick={() => setIsDark((value) => !value)}
-                whileHover={{ scale: 1.05, rotate: -1 }}
-                whileTap={{ scale: 0.97, y: 2 }}
-                className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
-                aria-pressed={isDark}
-              >
-                {isDark ? "Light Mode" : "Dark Mode"}
-              </motion.button>
-
-              <motion.button
-                type="button"
-                onClick={() => setIsMobileMenuOpen((value) => !value)}
-                whileHover={{ scale: 1.05, rotate: 1 }}
-                whileTap={{ scale: 0.97, y: 2 }}
-                className="brutal-card flex min-h-14 min-w-22 flex-col items-center justify-center bg-[#ff3b3b] px-3 py-2 text-white md:hidden"
-                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-                aria-controls="mobile-brutal-menu"
-                aria-expanded={isMobileMenuOpen}
-              >
-                <span className="font-display text-[10px] uppercase tracking-[0.24em]">Block</span>
-                <span className="font-display text-lg uppercase leading-none">Menu</span>
-              </motion.button>
+              </div>
             </div>
-          </motion.header>
 
-          <AnimatePresence>
-            {isMobileMenuOpen ? (
-              <motion.div
-                className="fixed inset-0 z-50 bg-black/55 p-4 md:hidden"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <motion.aside
-                  id="mobile-brutal-menu"
-                  role="dialog"
-                  aria-modal="true"
-                  aria-labelledby="mobile-menu-title"
-                  className="brutal-card flex h-full flex-col overflow-y-auto bg-white p-4"
-                  initial={{ y: 24, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: 24, opacity: 0 }}
-                  transition={{ type: "spring", stiffness: 180, damping: 20 }}
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-mono text-[11px] uppercase tracking-[0.3em]">Mobile Navigation</p>
-                      <h2 id="mobile-menu-title" className="mt-2 font-display text-4xl uppercase leading-none">
-                        Stacked Panel Menu
-                      </h2>
-                    </div>
+            <div className="mt-4 grid gap-3 md:hidden">
+              <div className="brutal-card -rotate-[1deg] bg-[#ffe600] px-3 py-3">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.22em]">Notice Bar</p>
+                    <p className="mt-1 font-display text-lg uppercase leading-none">Quick Navigation</p>
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-2">
+                    <motion.button
+                      type="button"
+                      onClick={() => setIsDark((value) => !value)}
+                      whileHover={{ scale: 1.04, rotate: -1 }}
+                      whileTap={{ scale: 0.97, y: 2 }}
+                      className="border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-[10px] uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
+                      aria-pressed={isDark}
+                    >
+                      {isDark ? "Light" : "Dark"}
+                    </motion.button>
 
                     <motion.button
                       type="button"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      whileHover={{ scale: 1.05, rotate: -1 }}
+                      onClick={() => setIsMobileMenuOpen((value) => !value)}
+                      whileHover={{ scale: 1.04, rotate: 1 }}
                       whileTap={{ scale: 0.97, y: 2 }}
-                      className="border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
-                      aria-label="Close navigation menu"
+                      className="border-4 border-black bg-[#ff3b3b] px-3 py-2 font-display text-[10px] uppercase tracking-[0.2em] text-white shadow-[4px_4px_0_#000]"
+                      aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                      aria-controls="mobile-notice-menu"
+                      aria-expanded={isMobileMenuOpen}
                     >
-                      Close
+                      {isMobileMenuOpen ? "Hide Menu" : "Open Menu"}
                     </motion.button>
                   </div>
+                </div>
+              </div>
 
-                  <div className="mt-6 grid gap-4">
-                    {navItems.map((item, index) => {
-                      const surface = mobileMenuCardSurfaces[index % mobileMenuCardSurfaces.length];
-                      const textClassName = surface.includes("text-white") ? "text-white" : "text-black";
+              <AnimatePresence initial={false}>
+                {isMobileMenuOpen ? (
+                  <motion.div
+                    key="mobile-notice-menu"
+                    id="mobile-notice-menu"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                    className="overflow-hidden"
+                  >
+                    <div className="grid gap-3">
+                      {navItems.map((item, index) => {
+                        const surface = mobileMenuCardSurfaces[index % mobileMenuCardSurfaces.length];
+                        const textClassName = surface.includes("text-white") ? "text-white" : "text-black";
 
-                      return (
-                        <motion.button
-                          key={item.id}
-                          type="button"
-                          onClick={() => handleNavSelection(item.id)}
-                          whileHover={{ scale: 1.02, rotate: index % 2 === 0 ? 1 : -1 }}
-                          whileTap={{ scale: 0.97, y: 2 }}
-                          className={`brutal-card flex w-full items-center justify-between px-4 py-4 ${surface}`}
-                        >
-                          <span className={`font-display text-2xl uppercase leading-none ${textClassName}`}>{item.label}</span>
-                          <span className={`font-mono text-xs uppercase tracking-[0.18em] ${textClassName}`}>Open</span>
-                        </motion.button>
-                      );
-                    })}
-                  </div>
+                        return (
+                          <motion.button
+                            key={item.id}
+                            type="button"
+                            onClick={() => handleNavSelection(item.id)}
+                            whileHover={{ scale: 1.02, rotate: index % 2 === 0 ? 1 : -1 }}
+                            whileTap={{ scale: 0.97, y: 2 }}
+                            className={`brutal-card flex w-full items-center justify-between px-4 py-4 ${surface}`}
+                          >
+                            <span className={`font-display text-xl uppercase leading-none ${textClassName}`}>{item.label}</span>
+                            <span className={`font-mono text-[10px] uppercase tracking-[0.18em] ${textClassName}`}>Jump</span>
+                          </motion.button>
+                        );
+                      })}
 
-                  <div className="mt-auto grid gap-3 pt-6">
-                    <motion.a
-                      href={`mailto:${contactDetails.email}`}
-                      onClick={handleEmailStart}
-                      whileHover={{ scale: 1.03, rotate: 1 }}
-                      whileTap={{ scale: 0.97, y: 2 }}
-                      className="brutal-card bg-[#ffe600] px-4 py-4"
-                    >
-                      <span className="font-display text-2xl uppercase leading-none">Start A Conversation</span>
-                    </motion.a>
-                  </div>
-                </motion.aside>
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
+                      <motion.a
+                        href={`mailto:${contactDetails.email}`}
+                        onClick={handleEmailStart}
+                        whileHover={{ scale: 1.03, rotate: 1 }}
+                        whileTap={{ scale: 0.97, y: 2 }}
+                        className="brutal-card bg-white px-4 py-4"
+                      >
+                        <span className="font-display text-xl uppercase leading-none">Start A Conversation</span>
+                      </motion.a>
+                    </div>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            </div>
+          </motion.header>
 
           <main className="space-y-18">
-            <section id="hero" className="scroll-mt-28 relative grid gap-8 pb-6 pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+            <section id="hero" className="scroll-mt-20 relative grid gap-8 pb-6 pt-2 md:scroll-mt-28 md:pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
               <div className="absolute inset-0 hidden xl:block">
                 {floatingNotes.map((note) => (
                   <motion.div
@@ -271,7 +270,7 @@ export default function App() {
                 <p className="font-mono text-xs uppercase tracking-[0.35em]">
                   BCA Graduate / Currently Pursuing A Master Of Computer Applications (MCA) / MERN Stack Developer
                 </p>
-                <h2 className="mt-4 font-display text-[clamp(3.15rem,8vw,7.8rem)] uppercase leading-[0.88]">
+                <h2 className="mt-4 font-display text-[clamp(2.7rem,15vw,4.9rem)] uppercase leading-[0.88] sm:text-[clamp(3.15rem,8vw,7.8rem)]">
                   Hi, I&apos;m Shashank
                   <span className="block">Full Stack Developer</span>
                   <span className="block text-[#ff3b3b]">I Build Scalable Web Applications</span>
