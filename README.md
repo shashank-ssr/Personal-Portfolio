@@ -1,4 +1,4 @@
-# 🚀 Neo-Brutalist Developer Portfolio
+# 🚀 Developer Portfolio
 
 A bold, interactive **scrapbook-style developer portfolio** built to stand out from traditional designs.  
 This project showcases my **full-stack development skills**, real-world applications, and creative frontend approach.
@@ -6,7 +6,7 @@ This project showcases my **full-stack development skills**, real-world applicat
 ---
 
 ## 🔗 Live Demo
-👉 https://your-portfolio-link.vercel.app
+👉 https://shashank-singh-rajput.vercel.app/
 
 ---
 
