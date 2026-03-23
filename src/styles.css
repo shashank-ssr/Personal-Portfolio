@@ -21,6 +21,7 @@
   html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    overscroll-behavior-x: none;
   }
 
   html,
@@ -35,6 +36,7 @@
     background: var(--page);
     color: var(--ink);
     overflow-x: hidden;
+    overscroll-behavior-x: none;
   }
 
   #root {
@@ -214,6 +216,14 @@
 }
 
 @media (max-width: 768px) {
+  .brutal-card {
+    box-shadow: 4px 4px 0 #000000;
+  }
+
+  .tape-strip {
+    box-shadow: 2px 2px 0 #000000;
+  }
+
   .custom-cursor-dot,
   .custom-cursor-ring {
     display: none;

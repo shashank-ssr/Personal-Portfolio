@@ -6,9 +6,9 @@ export const navItems = [
 ];
 
 export const heroBadges = [
-  { text: "MERN STACK DEVELOPMENT", tone: "yellow", rotation: "-rotate-[3deg]" },
-  { text: "REACT.JS / NODE.JS / MONGODB", tone: "red", rotation: "rotate-[2deg]" },
-  { text: "RESPONSIVE UI / REAL PROJECTS", tone: "blue", rotation: "-rotate-[2deg]" },
+  { text: "MERN STACK DEVELOPMENT", tone: "yellow", rotation: "rotate-0 sm:-rotate-[3deg]" },
+  { text: "REACT.JS / NODE.JS / MONGODB", tone: "red", rotation: "rotate-0 sm:rotate-[2deg]" },
+  { text: "RESPONSIVE UI / REAL PROJECTS", tone: "blue", rotation: "rotate-0 sm:-rotate-[2deg]" },
 ];
 
 export const stats = [
@@ -27,7 +27,7 @@ export const aboutNotes = [
     title: "Full Stack Development",
     text: "Build end-to-end web applications with MongoDB, Express.js, React.js, Node.js, REST APIs, and database-driven features.",
     surface: "bg-[#0066ff]",
-    rotation: "rotate-[2deg]",
+    rotation: "rotate-0 sm:rotate-[2deg]",
     hoverRotate: 1,
     inverted: true,
   },
@@ -35,14 +35,14 @@ export const aboutNotes = [
     title: "Problem-Solving Projects",
     text: "Develop solutions for real use cases, including vehicle marketplaces, donor-recipient platforms, and live business websites.",
     surface: "bg-[#ffe600]",
-    rotation: "-rotate-[2deg]",
+    rotation: "rotate-0 sm:-rotate-[2deg]",
     hoverRotate: -1,
   },
   {
     title: "Responsive Product Thinking",
     text: "Focus on usability, scalable structure, and responsive design so features stay clear and reliable across devices.",
     surface: "bg-[#ff3b3b]",
-    rotation: "rotate-[1deg]",
+    rotation: "rotate-0 sm:rotate-[1deg]",
     hoverRotate: 1,
     inverted: true,
   },
@@ -56,7 +56,7 @@ export const projects = [
     year: "FULL STACK",
     surface: "bg-white",
     accent: "yellow",
-    rotation: "rotate-[1deg]",
+    rotation: "rotate-0 sm:rotate-[1deg]",
     summary:
       "A full stack car marketplace that simplifies vehicle discovery, listing management, and buyer-seller interaction through a responsive user experience.",
     impact:
@@ -86,7 +86,7 @@ export const projects = [
     year: "REAL-WORLD",
     surface: "bg-[#ffe600]",
     accent: "red",
-    rotation: "-rotate-[1deg]",
+    rotation: "rotate-0 sm:-rotate-[1deg]",
     summary:
       "A real-world web platform that helps blood donors and recipients connect through accessible flows, clear communication, and responsive design.",
     impact:
@@ -116,7 +116,7 @@ export const projects = [
     year: "LIVE",
     surface: "bg-[#0066ff]",
     accent: "blue",
-    rotation: "rotate-[1.4deg]",
+    rotation: "rotate-0 sm:rotate-[1.4deg]",
     summary:
       "A deployed business website for a protection services company, built to present services clearly, strengthen trust, and capture inquiries online.",
     impact:
@@ -161,22 +161,22 @@ export const workflowNotes = [
 ];
 
 export const skills = [
-  { label: "MongoDB", tone: "yellow", rotation: "-rotate-[3deg]" },
-  { label: "Express.js", tone: "blue", rotation: "rotate-[2deg]" },
-  { label: "React.js", tone: "red", rotation: "-rotate-[2deg]" },
-  { label: "Node.js", tone: "white", rotation: "rotate-[3deg]" },
-  { label: "HTML", tone: "yellow", rotation: "-rotate-[1deg]" },
-  { label: "CSS", tone: "white", rotation: "rotate-[1deg]" },
-  { label: "JavaScript", tone: "blue", rotation: "-rotate-[3deg]" },
-  { label: "REST APIs", tone: "red", rotation: "rotate-[2deg]" },
-  { label: "Tailwind CSS", tone: "yellow", rotation: "-rotate-[2deg]" },
-  { label: "Framer Motion", tone: "white", rotation: "rotate-[1deg]" },
-  { label: "Database Management", tone: "red", rotation: "-rotate-[1deg]" },
-  { label: "Python", tone: "blue", rotation: "rotate-[3deg]" },
-  { label: "C", tone: "yellow", rotation: "-rotate-[2deg]" },
-  { label: "GitHub", tone: "white", rotation: "rotate-[2deg]" },
-  { label: "Postman", tone: "red", rotation: "-rotate-[3deg]" },
-  { label: "VS Code", tone: "blue", rotation: "rotate-[1deg]" },
+  { label: "MongoDB", tone: "yellow", rotation: "rotate-0 sm:-rotate-[3deg]" },
+  { label: "Express.js", tone: "blue", rotation: "rotate-0 sm:rotate-[2deg]" },
+  { label: "React.js", tone: "red", rotation: "rotate-0 sm:-rotate-[2deg]" },
+  { label: "Node.js", tone: "white", rotation: "rotate-0 sm:rotate-[3deg]" },
+  { label: "HTML", tone: "yellow", rotation: "rotate-0 sm:-rotate-[1deg]" },
+  { label: "CSS", tone: "white", rotation: "rotate-0 sm:rotate-[1deg]" },
+  { label: "JavaScript", tone: "blue", rotation: "rotate-0 sm:-rotate-[3deg]" },
+  { label: "REST APIs", tone: "red", rotation: "rotate-0 sm:rotate-[2deg]" },
+  { label: "Tailwind CSS", tone: "yellow", rotation: "rotate-0 sm:-rotate-[2deg]" },
+  { label: "Framer Motion", tone: "white", rotation: "rotate-0 sm:rotate-[1deg]" },
+  { label: "Database Management", tone: "red", rotation: "rotate-0 sm:-rotate-[1deg]" },
+  { label: "Python", tone: "blue", rotation: "rotate-0 sm:rotate-[3deg]" },
+  { label: "C", tone: "yellow", rotation: "rotate-0 sm:-rotate-[2deg]" },
+  { label: "GitHub", tone: "white", rotation: "rotate-0 sm:rotate-[2deg]" },
+  { label: "Postman", tone: "red", rotation: "rotate-0 sm:-rotate-[3deg]" },
+  { label: "VS Code", tone: "blue", rotation: "rotate-0 sm:rotate-[1deg]" },
 ];
 
 export const socialLinks = [

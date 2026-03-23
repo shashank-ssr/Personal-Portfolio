@@ -60,11 +60,11 @@ export default function ContactNote({ contactDetails, socialLinks }) {
   };
 
   return (
-    <div className="brutal-card relative min-w-0 bg-white p-6 sm:p-8">
+    <div className="brutal-card relative w-full max-w-full min-w-0 overflow-hidden bg-white px-4 py-6 sm:overflow-visible sm:px-8 sm:py-8">
       <span className="push-pin left-5 top-5" />
       <span className="push-pin right-5 top-5 bg-[#0066ff]" />
 
-      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+      <div className="grid w-full max-w-full min-w-0 gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
         <div className="min-w-0">
           <p className="break-words font-display text-4xl uppercase leading-none sm:text-6xl">Let&apos;s Talk About Full Stack Opportunities.</p>
           <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed sm:text-base">{contactDetails.availability}</p>
@@ -124,13 +124,13 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                 type="submit"
                 whileHover={{ scale: 1.05, rotate: 1 }}
                 whileTap={{ scale: 0.97, y: 2 }}
-                className="border-4 border-black bg-[#ff3b3b] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] text-white shadow-[5px_5px_0_#000]"
+                className="w-full max-w-full border-4 border-black bg-[#ff3b3b] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] text-white shadow-[3px_3px_0_#000] sm:w-auto sm:shadow-[5px_5px_0_#000]"
               >
                 Send Email Inquiry
               </motion.button>
 
               {didSubmit ? (
-                <div className="border-4 border-black bg-[#ffe600] px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000]">
+                <div className="w-full max-w-full break-words border-4 border-black bg-[#ffe600] px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] shadow-[2px_2px_0_#000] sm:w-auto sm:shadow-[4px_4px_0_#000]">
                   Opening your mail draft or Gmail compose.
                 </div>
               ) : null}
@@ -139,10 +139,10 @@ export default function ContactNote({ contactDetails, socialLinks }) {
         </div>
 
         <div className="grid min-w-0 gap-4">
-          <div className="brutal-card min-w-0 rotate-[2deg] bg-[#ffe600] p-5">
+          <div className="brutal-card w-full max-w-full min-w-0 rotate-0 bg-[#ffe600] p-5 sm:rotate-[2deg]">
             <p className="font-mono text-xs uppercase tracking-[0.24em]">Quick Contact</p>
             <div className="mt-4 grid gap-3 font-mono text-sm">
-              <div className="border-4 border-black bg-white px-4 py-3 shadow-[4px_4px_0_#000]">
+              <div className="w-full max-w-full border-4 border-black bg-white px-4 py-3 shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]">
                 <span className="font-display text-xl uppercase leading-none">Direct Contact</span>
                 <a
                   href={`mailto:${contactDetails.email}`}
@@ -152,11 +152,11 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                   {contactDetails.email}
                 </a>
               </div>
-              <div className="border-4 border-black bg-white px-4 py-3 shadow-[4px_4px_0_#000]">
+              <div className="w-full max-w-full border-4 border-black bg-white px-4 py-3 shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]">
                 <span className="font-display text-xl uppercase leading-none">Contact Number</span>
                 <a
                   href={`tel:${contactDetails.phone.replace(/\s+/g, "")}`}
-                  className="mt-2 block text-base font-bold underline decoration-2 underline-offset-4"
+                  className="mt-2 block break-all text-base font-bold underline decoration-2 underline-offset-4"
                 >
                   {contactDetails.phone}
                 </a>
@@ -164,7 +164,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
             </div>
           </div>
 
-          <div className="brutal-card min-w-0 -rotate-[1deg] bg-white p-5">
+          <div className="brutal-card w-full max-w-full min-w-0 rotate-0 bg-white p-5 sm:-rotate-[1deg]">
             <p className="font-display text-3xl uppercase leading-none">Professional Links</p>
             <div className="mt-4 flex flex-wrap gap-3">
               {codingProfiles.map((profile) => (
@@ -175,7 +175,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                   rel="noreferrer"
                   whileHover={{ scale: 1.04, rotate: -1 }}
                   whileTap={{ scale: 0.97, y: 2 }}
-                  className={`border-4 border-black px-4 py-3 font-display text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000] ${profile.surface} ${profile.textClassName}`}
+                  className={`w-full max-w-full border-4 border-black px-4 py-3 text-center font-display text-xs uppercase tracking-[0.18em] shadow-[2px_2px_0_#000] sm:w-auto sm:text-left sm:shadow-[4px_4px_0_#000] ${profile.surface} ${profile.textClassName}`}
                 >
                   {profile.label}
                 </motion.a>
@@ -191,7 +191,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                   rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                   whileHover={{ scale: 1.04, rotate: -1 }}
                   whileTap={{ scale: 0.97, y: 2 }}
-                  className={`brutal-card flex flex-col items-start gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${link.surface}`}
+                  className={`brutal-card flex w-full max-w-full flex-col items-start gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${link.surface}`}
                 >
                   <span className={`font-display text-xl uppercase leading-none ${link.inverted ? "text-white" : ""}`}>{link.label}</span>
                   <span className={`font-mono text-xs uppercase tracking-[0.18em] ${link.inverted ? "text-white" : ""}`}>{link.meta}</span>

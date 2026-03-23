@@ -1,7 +1,7 @@
 const positions = {
-  left: "left-3 -top-4 -rotate-[8deg] sm:left-4",
-  right: "right-3 -top-4 rotate-[8deg] sm:right-4",
-  center: "left-1/2 -top-4 -translate-x-1/2 -rotate-[3deg]",
+  left: "left-3 top-2 -rotate-[4deg] sm:left-4 sm:-top-4 sm:-rotate-[8deg]",
+  right: "right-3 top-2 rotate-[4deg] sm:right-4 sm:-top-4 sm:rotate-[8deg]",
+  center: "left-1/2 top-2 -translate-x-1/2 rotate-0 sm:-top-4 sm:-rotate-[3deg]",
 };
 
 export default function Tape({ position = "left", className = "" }) {

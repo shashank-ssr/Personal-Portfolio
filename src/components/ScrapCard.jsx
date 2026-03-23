@@ -11,7 +11,7 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
       layout
       whileHover={{ scale: 1.02, rotate: 1 }}
       whileTap={{ scale: 0.98, y: 3 }}
-      className={`brutal-card relative min-w-0 overflow-visible p-5 sm:p-6 ${project.surface} ${project.rotation}`}
+      className={`brutal-card relative w-full max-w-full min-w-0 overflow-hidden p-5 pt-8 sm:overflow-visible sm:p-6 ${project.surface} ${project.rotation}`}
       onMouseEnter={onFocus}
     >
       <Tape position="left" />
@@ -44,7 +44,7 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
         onClick={onToggle}
         whileHover={{ scale: 1.05, rotate: -1 }}
         whileTap={{ scale: 0.97, y: 2 }}
-        className="mt-6 border-4 border-black bg-white px-4 py-3 font-display text-xs uppercase tracking-[0.2em] shadow-[4px_4px_0_#000]"
+        className="mt-6 w-full max-w-full border-4 border-black bg-white px-4 py-3 font-display text-xs uppercase tracking-[0.2em] shadow-[2px_2px_0_#000] sm:w-auto sm:shadow-[4px_4px_0_#000]"
         aria-expanded={isActive}
       >
         {isActive ? "Hide Case Notes" : "Open Case Notes"}
@@ -60,12 +60,15 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
             transition={{ duration: 0.35 }}
             className="overflow-hidden"
           >
-            <div className="brutal-card bg-white p-5">
+            <div className="brutal-card w-full max-w-full bg-white p-5">
               <p className="font-display text-2xl uppercase leading-none">Why It Hits</p>
               <p className="mt-3 font-mono text-sm leading-relaxed">{project.impact}</p>
               <div className="mt-4 grid gap-3">
                 {project.details.map((detail) => (
-                  <div key={detail} className="border-4 border-black bg-[#ffe600] px-4 py-3 font-mono text-sm leading-relaxed shadow-[4px_4px_0_#000]">
+                  <div
+                    key={detail}
+                    className="w-full max-w-full border-4 border-black bg-[#ffe600] px-4 py-3 font-mono text-sm leading-relaxed shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
+                  >
                     {detail}
                   </div>
                 ))}

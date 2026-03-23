@@ -162,7 +162,7 @@ export default function App() {
             </div>
 
             <div className="mt-4 grid gap-3 md:hidden">
-              <div className="brutal-card -rotate-[1deg] bg-[#ffe600] px-3 py-3">
+              <div className="brutal-card rotate-0 bg-[#ffe600] px-3 py-3 sm:-rotate-[1deg]">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <p className="font-display text-lg uppercase leading-none">Quick Navigation</p>
@@ -244,7 +244,7 @@ export default function App() {
           </motion.header>
 
           <main className="w-full min-w-0 space-y-18">
-            <section id="hero" className="scroll-mt-20 relative grid w-full min-w-0 gap-8 pb-6 pt-2 md:scroll-mt-28 md:pt-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
+            <section id="hero" className="scroll-mt-20 relative grid w-full min-w-0 gap-8 px-2 pb-6 pt-2 sm:px-0 md:scroll-mt-28 md:pt-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
               <div className="absolute inset-0 hidden xl:block">
                 {floatingNotes.map((note) => (
                   <motion.div
@@ -317,7 +317,7 @@ export default function App() {
                 <motion.div
                   {...revealProps}
                   transition={{ ...revealProps.transition, delay: 0.08 }}
-                  className="brutal-card min-w-0 rotate-[2deg] bg-[#ffe600] p-5"
+                  className="brutal-card min-w-0 rotate-0 bg-[#ffe600] p-5 sm:rotate-[2deg]"
                 >
                   <Tape position="center" />
                   <p className="font-display text-4xl uppercase leading-none sm:text-5xl">
@@ -354,7 +354,7 @@ export default function App() {
                 <motion.div
                   {...revealProps}
                   transition={{ ...revealProps.transition, delay: 0.24 }}
-                  className="brutal-card min-w-0 -rotate-[1deg] bg-white p-5"
+                  className="brutal-card min-w-0 rotate-0 bg-white p-5 sm:-rotate-[1deg]"
                 >
                   <p className="font-mono text-xs uppercase tracking-[0.28em]">Currently Focused On</p>
                   <div className="mt-4 flex flex-wrap gap-3">
@@ -385,7 +385,7 @@ export default function App() {
               </div>
             </section>
 
-            <motion.section id="about" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
+            <motion.section id="about" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6 px-2 sm:px-0">
               <SectionTitle
                 kicker="Notebook Bio"
                 title="About"
@@ -395,7 +395,7 @@ export default function App() {
               />
 
               <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-                <article className="notebook-page brutal-card relative min-w-0 -rotate-[1deg] p-6 sm:p-8">
+                <article className="notebook-page brutal-card relative min-w-0 rotate-0 p-6 sm:-rotate-[1deg] sm:p-8">
                   <Tape position="left" />
                   <p className="font-display text-4xl uppercase leading-none sm:text-5xl">Full Stack Development With Real-World Focus.</p>
                   <div className="mt-6 space-y-5 font-mono text-sm leading-relaxed sm:text-base">
@@ -432,49 +432,51 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="projects" {...revealProps} className="scroll-mt-28 relative z-10 min-w-0 space-y-6 overflow-visible">
-              <SectionTitle
-                kicker="Scrap Stack"
-                title="Projects"
-                subtitle="Selected projects built around full stack development, responsive design, database-backed features, and real-world problem solving."
-                accent="blue"
-                className={isDark ? "text-white" : "text-black"}
-              />
+            <motion.section id="projects" {...revealProps} className="scroll-mt-28 relative z-10 min-w-0 space-y-6">
+              <div className="project-section-shell w-full max-w-full overflow-hidden px-4 sm:overflow-visible sm:px-6">
+                <SectionTitle
+                  kicker="Scrap Stack"
+                  title="Projects"
+                  subtitle="Selected projects built around full stack development, responsive design, database-backed features, and real-world problem solving."
+                  accent="blue"
+                  className={`${isDark ? "text-white" : "text-black"} ml-2 sm:ml-0`}
+                />
 
-              <div className="grid min-w-0 items-start gap-6 xl:grid-cols-2">
-                {projects.map((project) => (
-                  <ScrapCard
-                    key={project.id}
-                    project={project}
-                    isActive={project.id === activeProjectId}
-                    onToggle={() => setActiveProjectId((current) => (current === project.id ? "" : project.id))}
-                    onFocus={() => setActiveProjectId(project.id)}
-                  />
-                ))}
+                <div className="mt-6 grid min-w-0 items-start gap-6 xl:grid-cols-2">
+                  {projects.map((project) => (
+                    <ScrapCard
+                      key={project.id}
+                      project={project}
+                      isActive={project.id === activeProjectId}
+                      onToggle={() => setActiveProjectId((current) => (current === project.id ? "" : project.id))}
+                      onFocus={() => setActiveProjectId(project.id)}
+                    />
+                  ))}
+                </div>
+
+                <motion.aside
+                  layout
+                  className="brutal-card mt-6 ml-auto w-full max-w-3xl min-w-0 rotate-0 bg-[#ffe600] p-5 sm:rotate-[1deg]"
+                  whileHover={{ scale: 1.03, rotate: 1.2 }}
+                >
+                  <p className="font-mono text-xs uppercase tracking-[0.28em]">Project Snapshot</p>
+                  <p className="mt-2 break-words font-display text-4xl uppercase leading-none">{activeProject.title}</p>
+                  <p className="mt-3 font-mono text-sm leading-relaxed">{activeProject.impact}</p>
+                </motion.aside>
               </div>
-
-              <motion.aside
-                layout
-                className="brutal-card ml-auto w-full max-w-3xl min-w-0 rotate-[1deg] bg-[#ffe600] p-5"
-                whileHover={{ scale: 1.03, rotate: 1.2 }}
-              >
-                <p className="font-mono text-xs uppercase tracking-[0.28em]">Project Snapshot</p>
-                <p className="mt-2 font-display text-4xl uppercase leading-none">{activeProject.title}</p>
-                <p className="mt-3 font-mono text-sm leading-relaxed">{activeProject.impact}</p>
-              </motion.aside>
             </motion.section>
 
-            <motion.section id="skills" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
+            <motion.section id="skills" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6 px-2 sm:px-0">
               <SectionTitle
                 kicker="Sticker Sheet"
                 title="Skills"
                 subtitle="Core technologies, programming languages, tools, and frameworks I use to build responsive full stack applications."
                 accent="yellow"
-                className={isDark ? "text-white" : "text-black"}
+                className={`${isDark ? "text-white" : "text-black"} ml-2 sm:ml-0`}
               />
 
               <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
-                <article className="brutal-card min-w-0 rotate-[1deg] bg-[#ff3b3b] p-6 text-white">
+                <article className="brutal-card min-w-0 rotate-0 bg-[#ff3b3b] p-6 text-white sm:rotate-[1deg]">
                   <Tape position="center" />
                   <p className="font-display text-4xl uppercase leading-none">Technical Skill Groups.</p>
                   <div className="mt-5 grid gap-3">
@@ -508,14 +510,18 @@ export default function App() {
             </motion.section>
 
             <motion.section id="contact" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
-              <SectionTitle
-                kicker="Pinned Note"
-                title="Contact"
-                subtitle="Open to placements, internships, and full stack developer roles. Let&apos;s discuss how I can contribute."
-                accent="red"
-                className={isDark ? "text-white" : "text-black"}
-              />
-              <ContactNote contactDetails={contactDetails} socialLinks={socialLinks} />
+              <div className="contact-section-shell w-full max-w-full overflow-hidden px-4 sm:overflow-visible sm:px-6">
+                <SectionTitle
+                  kicker="Pinned Note"
+                  title="Contact"
+                  subtitle="Open to placements, internships, and full stack developer roles. Let&apos;s discuss how I can contribute."
+                  accent="red"
+                  className={`${isDark ? "text-white" : "text-black"} ml-2 sm:ml-0`}
+                />
+                <div className="mt-6">
+                  <ContactNote contactDetails={contactDetails} socialLinks={socialLinks} />
+                </div>
+              </div>
             </motion.section>
           </main>
         </div>
