@@ -1,70 +1,104 @@
-# Getting Started with Create React App
+# 🚀 Neo-Brutalist Developer Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A bold, interactive **scrapbook-style developer portfolio** built to stand out from traditional designs.  
+This project showcases my **full-stack development skills**, real-world applications, and creative frontend approach.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🔗 Live Demo
+👉 https://your-portfolio-link.vercel.app
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 👨‍💻 About Me
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Hi, I'm **Shashank Singh** — a Full Stack Developer (MERN) and MCA student.
 
-### `npm test`
+I focus on building **scalable, user-friendly web applications** with clean UI and strong functionality.  
+This portfolio reflects both my **technical skills** and my **creative approach to frontend development**.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ⚡ Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- 🎨 Neo-Brutalist scrapbook-style UI
+- 🖱️ Custom cursor & interactive animations
+- 📱 Fully responsive design
+- ⚡ Smooth animations using Framer Motion
+- 🧩 Component-based React architecture
+- 🚀 Optimized for performance
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Tech Stack
 
-### `npm run eject`
+### Frontend
+- React.js
+- Tailwind CSS
+- Framer Motion
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend / Skills
+- Node.js
+- Express.js
+- MongoDB
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Other Tools
+- GitHub
+- Postman
+- VS Code
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## 📂 Projects Showcased
 
-## Learn More
+### 🚗 Car Buying/Selling Website
+- Developed a full-stack MERN application for buying and selling cars  
+- Designed a responsive and intuitive user interface  
+- Focused on usability and real-world functionality  
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Tech:** MERN Stack
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+---
 
-### Code Splitting
+### 🩸 Blood Donation Bank Website
+- Built a platform connecting blood donors and recipients  
+- Improved accessibility and communication between users  
+- Solved a real-world problem with a practical solution  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+**Tech:** MERN Stack
 
-### Analyzing the Bundle Size
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### 🛡️ Protection Website
+👉 https://shashank-protection.vercel.app/
 
-### Making a Progressive Web App
+- Designed and developed a modern, responsive web application  
+- Focused on clean UI, performance, and user experience  
+- Implemented structured layout and interactive elements  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+**Tech:** React.js, Tailwind CSS
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 📬 Contact
 
-### Deployment
+- 📧 Email: rajputshashank1563@gmail.com  
+- 💼 LinkedIn: http://www.linkedin.com/in/shashanksingh15  
+- 💻 GitHub: https://github.com/shashank-ssr  
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## 🚀 Getting Started
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```bash
+# Clone the repository
+git clone https://github.com/shashank-ssr/your-repo-name.git
+
+# Navigate to project folder
+cd your-repo-name
+
+# Install dependencies
+npm install
+
+# Start development server
+npm start
