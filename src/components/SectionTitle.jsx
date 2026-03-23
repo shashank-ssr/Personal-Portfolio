@@ -1,0 +1,17 @@
+const accentClasses = {
+  red: "bg-[#ff3b3b] text-white",
+  yellow: "bg-[#ffe600] text-black",
+  blue: "bg-[#0066ff] text-white",
+};
+
+export default function SectionTitle({ kicker, title, subtitle, accent = "yellow", className = "" }) {
+  return (
+    <div className={`max-w-3xl ${className}`}>
+      <span className={`inline-flex border-4 border-black px-3 py-2 font-display text-xs uppercase tracking-[0.24em] shadow-[4px_4px_0_#000] ${accentClasses[accent]}`}>
+        {kicker}
+      </span>
+      <h2 className="section-underline mt-4 font-display text-5xl uppercase leading-none sm:text-6xl">{title}</h2>
+      <p className="mt-3 font-mono text-sm leading-relaxed sm:text-base">{subtitle}</p>
+    </div>
+  );
+}
