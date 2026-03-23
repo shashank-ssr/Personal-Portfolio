@@ -113,10 +113,10 @@ export default function App() {
     <div className={`portfolio-shell ${isDark ? "theme-dark" : ""}`}>
       <CustomCursor />
 
-      <div className="paper-texture min-h-screen overflow-x-clip text-black transition-colors duration-300">
-        <div className="mx-auto max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
+      <div className="paper-texture min-h-screen w-full overflow-x-hidden text-black transition-colors duration-300">
+        <div className="mx-auto w-full max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
           <motion.header
-            className="brutal-card relative z-40 mb-6 bg-white px-4 py-4 md:sticky md:top-4 md:mb-8"
+            className="brutal-card relative z-40 mb-6 w-full overflow-x-clip bg-white px-4 py-4 md:sticky md:top-4 md:mb-8"
             initial={{ y: -18, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.4 }}
@@ -124,10 +124,10 @@ export default function App() {
             <Tape position="left" />
             <Tape position="right" />
 
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="shrink-0 pr-2">
+            <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div className="min-w-0 shrink pr-2">
                 <p className="font-mono text-[10px] uppercase tracking-[0.28em] sm:text-[11px]">Shashank Singh Portfolio</p>
-                <h1 className="mt-1 font-display text-xl uppercase leading-none sm:text-2xl lg:text-3xl">
+                <h1 className="mt-1 break-words font-display text-xl uppercase leading-none sm:text-2xl lg:text-3xl">
                   Full Stack Developer / MERN Stack
                 </h1>
               </div>
@@ -163,13 +163,12 @@ export default function App() {
 
             <div className="mt-4 grid gap-3 md:hidden">
               <div className="brutal-card -rotate-[1deg] bg-[#ffe600] px-3 py-3">
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="font-mono text-[10px] uppercase tracking-[0.22em]">Notice Bar</p>
-                    <p className="mt-1 font-display text-lg uppercase leading-none">Quick Navigation</p>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-display text-lg uppercase leading-none">Quick Navigation</p>
                   </div>
 
-                  <div className="flex shrink-0 items-center gap-2">
+                  <div className="flex max-w-full shrink-0 flex-wrap justify-end gap-2">
                     <motion.button
                       type="button"
                       onClick={() => setIsDark((value) => !value)}
@@ -244,8 +243,8 @@ export default function App() {
             </div>
           </motion.header>
 
-          <main className="space-y-18">
-            <section id="hero" className="scroll-mt-20 relative grid gap-8 pb-6 pt-2 md:scroll-mt-28 md:pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+          <main className="w-full min-w-0 space-y-18">
+            <section id="hero" className="scroll-mt-20 relative grid w-full min-w-0 gap-8 pb-6 pt-2 md:scroll-mt-28 md:pt-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
               <div className="absolute inset-0 hidden xl:block">
                 {floatingNotes.map((note) => (
                   <motion.div
@@ -262,15 +261,15 @@ export default function App() {
 
               <motion.div
                 {...revealProps}
-                className="brutal-card relative bg-white p-6 sm:p-8 lg:p-10"
+                className="brutal-card relative min-w-0 bg-white p-6 sm:p-8 lg:p-10"
               >
                 <Tape position="left" />
                 <Tape position="right" />
 
-                <p className="font-mono text-xs uppercase tracking-[0.35em]">
+                <p className="max-w-full break-words font-mono text-xs uppercase tracking-[0.22em] sm:tracking-[0.35em]">
                   BCA Graduate / Currently Pursuing A Master Of Computer Applications (MCA) / MERN Stack Developer
                 </p>
-                <h2 className="mt-4 font-display text-[clamp(2.7rem,15vw,4.9rem)] uppercase leading-[0.88] sm:text-[clamp(3.15rem,8vw,7.8rem)]">
+                <h2 className="mt-4 break-words font-display text-[clamp(2.7rem,15vw,4.9rem)] uppercase leading-[0.88] sm:text-[clamp(3.15rem,8vw,7.8rem)]">
                   Hi, I&apos;m Shashank
                   <span className="block">Full Stack Developer</span>
                   <span className="block text-[#ff3b3b]">I Build Scalable Web Applications</span>
@@ -314,11 +313,11 @@ export default function App() {
                 <HandDrawnArrow className="pointer-events-none absolute -bottom-11 right-6 hidden lg:block" />
               </motion.div>
 
-              <div className="grid gap-5 pt-4 lg:pt-10">
+              <div className="grid min-w-0 gap-5 pt-4 lg:pt-10">
                 <motion.div
                   {...revealProps}
                   transition={{ ...revealProps.transition, delay: 0.08 }}
-                  className="brutal-card rotate-[2deg] bg-[#ffe600] p-5"
+                  className="brutal-card min-w-0 rotate-[2deg] bg-[#ffe600] p-5"
                 >
                   <Tape position="center" />
                   <p className="font-display text-4xl uppercase leading-none sm:text-5xl">
@@ -355,7 +354,7 @@ export default function App() {
                 <motion.div
                   {...revealProps}
                   transition={{ ...revealProps.transition, delay: 0.24 }}
-                  className="brutal-card -rotate-[1deg] bg-white p-5"
+                  className="brutal-card min-w-0 -rotate-[1deg] bg-white p-5"
                 >
                   <p className="font-mono text-xs uppercase tracking-[0.28em]">Currently Focused On</p>
                   <div className="mt-4 flex flex-wrap gap-3">
@@ -375,7 +374,7 @@ export default function App() {
                         rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                         whileHover={{ scale: 1.03, rotate: 1 }}
                         whileTap={{ scale: 0.97, y: 2 }}
-                        className={`brutal-card flex items-center justify-between px-4 py-3 ${link.surface}`}
+                        className={`brutal-card flex flex-col items-start gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${link.surface}`}
                       >
                         <span className={`font-display text-lg uppercase ${link.inverted ? "text-white" : ""}`}>{link.label}</span>
                         <span className={`font-mono text-xs uppercase tracking-[0.2em] ${link.inverted ? "text-white" : ""}`}>{link.meta}</span>
@@ -386,7 +385,7 @@ export default function App() {
               </div>
             </section>
 
-            <motion.section id="about" {...revealProps} className="scroll-mt-28 space-y-6">
+            <motion.section id="about" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
               <SectionTitle
                 kicker="Notebook Bio"
                 title="About"
@@ -395,8 +394,8 @@ export default function App() {
                 className={isDark ? "text-white" : "text-black"}
               />
 
-              <div className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-                <article className="notebook-page brutal-card relative -rotate-[1deg] p-6 sm:p-8">
+              <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+                <article className="notebook-page brutal-card relative min-w-0 -rotate-[1deg] p-6 sm:p-8">
                   <Tape position="left" />
                   <p className="font-display text-4xl uppercase leading-none sm:text-5xl">Full Stack Development With Real-World Focus.</p>
                   <div className="mt-6 space-y-5 font-mono text-sm leading-relaxed sm:text-base">
@@ -416,13 +415,13 @@ export default function App() {
                   </div>
                 </article>
 
-                <div className="grid gap-5">
+                <div className="grid min-w-0 gap-5">
                   {aboutNotes.map((note, index) => (
                     <motion.article
                       key={note.title}
                       whileHover={{ scale: 1.04, rotate: note.hoverRotate }}
                       whileTap={{ scale: 0.97, y: 2 }}
-                      className={`brutal-card p-5 ${note.surface} ${note.rotation}`}
+                      className={`brutal-card min-w-0 p-5 ${note.surface} ${note.rotation}`}
                       transition={{ type: "spring", stiffness: 220, damping: 14, delay: index * 0.04 }}
                     >
                       <p className={`font-display text-3xl uppercase leading-none ${note.inverted ? "text-white" : ""}`}>{note.title}</p>
@@ -433,7 +432,7 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="projects" {...revealProps} className="scroll-mt-28 relative z-10 space-y-6 overflow-visible">
+            <motion.section id="projects" {...revealProps} className="scroll-mt-28 relative z-10 min-w-0 space-y-6 overflow-visible">
               <SectionTitle
                 kicker="Scrap Stack"
                 title="Projects"
@@ -442,7 +441,7 @@ export default function App() {
                 className={isDark ? "text-white" : "text-black"}
               />
 
-              <div className="grid items-start gap-6 xl:grid-cols-2">
+              <div className="grid min-w-0 items-start gap-6 xl:grid-cols-2">
                 {projects.map((project) => (
                   <ScrapCard
                     key={project.id}
@@ -456,7 +455,7 @@ export default function App() {
 
               <motion.aside
                 layout
-                className="brutal-card ml-auto w-full max-w-3xl rotate-[1deg] bg-[#ffe600] p-5"
+                className="brutal-card ml-auto w-full max-w-3xl min-w-0 rotate-[1deg] bg-[#ffe600] p-5"
                 whileHover={{ scale: 1.03, rotate: 1.2 }}
               >
                 <p className="font-mono text-xs uppercase tracking-[0.28em]">Project Snapshot</p>
@@ -465,7 +464,7 @@ export default function App() {
               </motion.aside>
             </motion.section>
 
-            <motion.section id="skills" {...revealProps} className="scroll-mt-28 space-y-6">
+            <motion.section id="skills" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
               <SectionTitle
                 kicker="Sticker Sheet"
                 title="Skills"
@@ -474,8 +473,8 @@ export default function App() {
                 className={isDark ? "text-white" : "text-black"}
               />
 
-              <div className="grid gap-6 lg:grid-cols-[0.75fr_1.25fr]">
-                <article className="brutal-card rotate-[1deg] bg-[#ff3b3b] p-6 text-white">
+              <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
+                <article className="brutal-card min-w-0 rotate-[1deg] bg-[#ff3b3b] p-6 text-white">
                   <Tape position="center" />
                   <p className="font-display text-4xl uppercase leading-none">Technical Skill Groups.</p>
                   <div className="mt-5 grid gap-3">
@@ -488,7 +487,7 @@ export default function App() {
                   </div>
                 </article>
 
-                <article className="brutal-card relative bg-white p-6">
+                <article className="brutal-card relative min-w-0 bg-white p-6">
                   <Tape position="left" />
                   <Tape position="right" />
                   <div className="flex flex-wrap items-start gap-4">
@@ -508,7 +507,7 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="contact" {...revealProps} className="scroll-mt-28 space-y-6">
+            <motion.section id="contact" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
               <SectionTitle
                 kicker="Pinned Note"
                 title="Contact"

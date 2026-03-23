@@ -17,12 +17,12 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
       <Tape position="left" />
       <Tape position="right" />
 
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <p className={`font-mono text-xs uppercase tracking-[0.3em] ${textTone}`}>{project.label}</p>
-          <h3 className={`mt-2 font-display text-4xl uppercase leading-none sm:text-5xl ${textTone}`}>{project.title}</h3>
+          <h3 className={`mt-2 break-words font-display text-4xl uppercase leading-none sm:text-5xl ${textTone}`}>{project.title}</h3>
         </div>
-        <span className={`font-mono text-xs uppercase tracking-[0.2em] ${textTone}`}>{project.year}</span>
+        <span className={`self-start font-mono text-xs uppercase tracking-[0.2em] ${textTone}`}>{project.year}</span>
       </div>
 
       <div className="mt-5">

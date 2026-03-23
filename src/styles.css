@@ -12,12 +12,15 @@
     --blue: #0066ff;
   }
 
-  * {
+  *,
+  *::before,
+  *::after {
     box-sizing: border-box;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   html,
@@ -31,6 +34,11 @@
   body {
     background: var(--page);
     color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  #root {
+    overflow-x: hidden;
   }
 
   a {
@@ -62,6 +70,13 @@
     --page: #000000;
   }
 
+  .portfolio-shell,
+  .paper-texture {
+    min-width: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
   .paper-texture {
     background-color: var(--page);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='%23000' stroke-width='1' opacity='0.09'%3E%3Cpath d='M12 20h28'/%3E%3Cpath d='M94 22h38'/%3E%3Cpath d='M38 96h20'/%3E%3Cpath d='M122 126h30'/%3E%3C/g%3E%3Cg fill='%23000' opacity='0.08'%3E%3Ccircle cx='24' cy='46' r='1.5'/%3E%3Ccircle cx='152' cy='62' r='1.5'/%3E%3Ccircle cx='72' cy='138' r='1.5'/%3E%3Ccircle cx='142' cy='150' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
@@ -79,6 +94,7 @@
 
   .brutal-card {
     position: relative;
+    max-width: 100%;
     border: 4px solid #000000;
     border-radius: 0;
     box-shadow: 6px 6px 0 #000000;

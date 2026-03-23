@@ -60,13 +60,13 @@ export default function ContactNote({ contactDetails, socialLinks }) {
   };
 
   return (
-    <div className="brutal-card relative bg-white p-6 sm:p-8">
+    <div className="brutal-card relative min-w-0 bg-white p-6 sm:p-8">
       <span className="push-pin left-5 top-5" />
       <span className="push-pin right-5 top-5 bg-[#0066ff]" />
 
-      <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
-        <div>
-          <p className="font-display text-5xl uppercase leading-none sm:text-6xl">Let&apos;s Talk About Full Stack Opportunities.</p>
+      <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+        <div className="min-w-0">
+          <p className="break-words font-display text-4xl uppercase leading-none sm:text-6xl">Let&apos;s Talk About Full Stack Opportunities.</p>
           <p className="mt-4 max-w-xl font-mono text-sm leading-relaxed sm:text-base">{contactDetails.availability}</p>
 
           <form className="mt-8 grid gap-4" onSubmit={handleSubmit}>
@@ -138,8 +138,8 @@ export default function ContactNote({ contactDetails, socialLinks }) {
           </form>
         </div>
 
-        <div className="grid gap-4">
-          <div className="brutal-card rotate-[2deg] bg-[#ffe600] p-5">
+        <div className="grid min-w-0 gap-4">
+          <div className="brutal-card min-w-0 rotate-[2deg] bg-[#ffe600] p-5">
             <p className="font-mono text-xs uppercase tracking-[0.24em]">Quick Contact</p>
             <div className="mt-4 grid gap-3 font-mono text-sm">
               <div className="border-4 border-black bg-white px-4 py-3 shadow-[4px_4px_0_#000]">
@@ -164,7 +164,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
             </div>
           </div>
 
-          <div className="brutal-card -rotate-[1deg] bg-white p-5">
+          <div className="brutal-card min-w-0 -rotate-[1deg] bg-white p-5">
             <p className="font-display text-3xl uppercase leading-none">Professional Links</p>
             <div className="mt-4 flex flex-wrap gap-3">
               {codingProfiles.map((profile) => (
@@ -191,7 +191,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                   rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                   whileHover={{ scale: 1.04, rotate: -1 }}
                   whileTap={{ scale: 0.97, y: 2 }}
-                  className={`brutal-card flex items-center justify-between px-4 py-3 ${link.surface}`}
+                  className={`brutal-card flex flex-col items-start gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${link.surface}`}
                 >
                   <span className={`font-display text-xl uppercase leading-none ${link.inverted ? "text-white" : ""}`}>{link.label}</span>
                   <span className={`font-mono text-xs uppercase tracking-[0.18em] ${link.inverted ? "text-white" : ""}`}>{link.meta}</span>
