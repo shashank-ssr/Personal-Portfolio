@@ -114,7 +114,8 @@ export default function App() {
       <CustomCursor />
 
       <div className="paper-texture min-h-screen w-full overflow-x-hidden text-black transition-colors duration-300">
-        <div className="mx-auto w-full max-w-7xl px-4 pb-20 pt-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full max-w-full overflow-x-hidden px-4 sm:px-6 md:px-8">
+          <div className="mx-auto w-full max-w-7xl pb-20 pt-4">
           <motion.header
             className="brutal-card relative z-40 mb-6 w-full overflow-x-clip bg-white px-4 py-4 md:sticky md:top-4 md:mb-8"
             initial={{ y: -18, opacity: 0 }}
@@ -136,14 +137,14 @@ export default function App() {
                 {navItems.map((item) => (
                   <motion.button
                     key={item.id}
-                    type="button"
-                    onClick={() => scrollToSection(item.id)}
-                    whileHover={{ scale: 1.05, rotate: 1 }}
-                    whileTap={{ scale: 0.97, y: 2 }}
-                    className="border-4 border-black bg-[#ffe600] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000] transition-transform"
-                  >
-                    {item.label}
-                  </motion.button>
+                  type="button"
+                  onClick={() => scrollToSection(item.id)}
+                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  whileTap={{ scale: 0.97, y: 2 }}
+                  className="border-4 border-black bg-[#ffe600] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] shadow-[2px_2px_0_#000] transition-transform sm:shadow-[4px_4px_0_#000]"
+                >
+                  {item.label}
+                </motion.button>
                 ))}
               </nav>
 
@@ -153,7 +154,7 @@ export default function App() {
                   onClick={() => setIsDark((value) => !value)}
                   whileHover={{ scale: 1.05, rotate: -1 }}
                   whileTap={{ scale: 0.97, y: 2 }}
-                  className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
+                  className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
                   aria-pressed={isDark}
                 >
                   {isDark ? "Light Mode" : "Dark Mode"}
@@ -174,7 +175,7 @@ export default function App() {
                       onClick={() => setIsDark((value) => !value)}
                       whileHover={{ scale: 1.04, rotate: -1 }}
                       whileTap={{ scale: 0.97, y: 2 }}
-                      className="border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-[10px] uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
+                      className="border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-[10px] uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
                       aria-pressed={isDark}
                     >
                       {isDark ? "Light" : "Dark"}
@@ -185,7 +186,7 @@ export default function App() {
                       onClick={() => setIsMobileMenuOpen((value) => !value)}
                       whileHover={{ scale: 1.04, rotate: 1 }}
                       whileTap={{ scale: 0.97, y: 2 }}
-                      className="border-4 border-black bg-[#ff3b3b] px-3 py-2 font-display text-[10px] uppercase tracking-[0.2em] text-white shadow-[4px_4px_0_#000]"
+                      className="border-4 border-black bg-[#ff3b3b] px-3 py-2 font-display text-[10px] uppercase tracking-[0.2em] text-white shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
                       aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                       aria-controls="mobile-notice-menu"
                       aria-expanded={isMobileMenuOpen}
@@ -243,8 +244,8 @@ export default function App() {
             </div>
           </motion.header>
 
-          <main className="w-full min-w-0 space-y-18">
-            <section id="hero" className="scroll-mt-20 relative grid w-full min-w-0 gap-8 px-2 pb-6 pt-2 sm:px-0 md:scroll-mt-28 md:pt-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
+          <main className="w-full max-w-full min-w-0 space-y-18">
+            <section id="hero" className="scroll-mt-20 relative grid w-full min-w-0 gap-8 pb-6 pt-2 md:scroll-mt-28 md:pt-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
               <div className="absolute inset-0 hidden xl:block">
                 {floatingNotes.map((note) => (
                   <motion.div
@@ -291,20 +292,20 @@ export default function App() {
 
                 <div className="mt-8 flex flex-wrap gap-4">
                   <motion.button
-                    type="button"
-                    onClick={() => scrollToSection("projects")}
-                    whileHover={{ scale: 1.05, rotate: 1 }}
-                    whileTap={{ scale: 0.97, y: 2 }}
-                    className="border-4 border-black bg-[#ff3b3b] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] text-white shadow-[5px_5px_0_#000]"
-                  >
-                    See Projects
-                  </motion.button>
+                  type="button"
+                  onClick={() => scrollToSection("projects")}
+                  whileHover={{ scale: 1.05, rotate: 1 }}
+                  whileTap={{ scale: 0.97, y: 2 }}
+                  className="border-4 border-black bg-[#ff3b3b] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] text-white shadow-[3px_3px_0_#000] sm:shadow-[5px_5px_0_#000]"
+                >
+                  See Projects
+                </motion.button>
                   <motion.a
                     href={`mailto:${contactDetails.email}`}
                     onClick={handleEmailStart}
                     whileHover={{ scale: 1.05, rotate: -1 }}
                     whileTap={{ scale: 0.97, y: 2 }}
-                    className="border-4 border-black bg-[#ffe600] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] shadow-[5px_5px_0_#000]"
+                    className="border-4 border-black bg-[#ffe600] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] shadow-[3px_3px_0_#000] sm:shadow-[5px_5px_0_#000]"
                   >
                     Start A Conversation
                   </motion.a>
@@ -385,7 +386,7 @@ export default function App() {
               </div>
             </section>
 
-            <motion.section id="about" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6 px-2 sm:px-0">
+            <motion.section id="about" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
               <SectionTitle
                 kicker="Notebook Bio"
                 title="About"
@@ -466,13 +467,13 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="skills" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6 px-2 sm:px-0">
+            <motion.section id="skills" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
               <SectionTitle
                 kicker="Sticker Sheet"
                 title="Skills"
                 subtitle="Core technologies, programming languages, tools, and frameworks I use to build responsive full stack applications."
                 accent="yellow"
-                className={`${isDark ? "text-white" : "text-black"} ml-2 sm:ml-0`}
+                className={isDark ? "text-white" : "text-black"}
               />
 
               <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
@@ -481,7 +482,7 @@ export default function App() {
                   <p className="font-display text-4xl uppercase leading-none">Technical Skill Groups.</p>
                   <div className="mt-5 grid gap-3">
                     {workflowNotes.map((note) => (
-                      <div key={note.title} className="border-4 border-black bg-white px-4 py-3 text-black shadow-[4px_4px_0_#000]">
+                      <div key={note.title} className="border-4 border-black bg-white px-4 py-3 text-black shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]">
                         <p className="font-display text-2xl uppercase leading-none">{note.title}</p>
                         <p className="mt-2 font-mono text-sm leading-relaxed">{note.text}</p>
                       </div>
@@ -516,7 +517,7 @@ export default function App() {
                   title="Contact"
                   subtitle="Open to placements, internships, and full stack developer roles. Let&apos;s discuss how I can contribute."
                   accent="red"
-                  className={`${isDark ? "text-white" : "text-black"} ml-2 sm:ml-0`}
+                  className={isDark ? "text-white" : "text-black"}
                 />
                 <div className="mt-6">
                   <ContactNote contactDetails={contactDetails} socialLinks={socialLinks} />
@@ -524,6 +525,7 @@ export default function App() {
               </div>
             </motion.section>
           </main>
+          </div>
         </div>
       </div>
     </div>

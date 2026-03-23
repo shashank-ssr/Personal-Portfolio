@@ -16,6 +16,15 @@
   *::before,
   *::after {
     box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  img,
+  video,
+  canvas {
+    display: block;
+    max-width: 100%;
+    height: auto;
   }
 
   html {
@@ -28,6 +37,7 @@
   body,
   #root {
     margin: 0;
+    padding: 0;
     min-height: 100%;
     width: 100%;
   }
