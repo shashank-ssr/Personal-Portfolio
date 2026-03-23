@@ -11,7 +11,7 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
       layout
       whileHover={{ scale: 1.02, rotate: 1 }}
       whileTap={{ scale: 0.98, y: 3 }}
-      className={`brutal-card relative overflow-hidden p-5 sm:p-6 ${project.surface} ${project.rotation}`}
+      className={`brutal-card relative min-w-0 overflow-visible p-5 sm:p-6 ${project.surface} ${project.rotation}`}
       onMouseEnter={onFocus}
     >
       <Tape position="left" />

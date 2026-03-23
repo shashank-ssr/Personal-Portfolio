@@ -14,7 +14,12 @@ export const heroBadges = [
 export const stats = [
   { label: "Core Stack", value: "MERN STACK", surface: "bg-white" },
   { label: "Education", value: "BCA GRADUATE", surface: "bg-[#ffe600]" },
-  { label: "Current Path", value: "MCA IN PROGRESS", surface: "bg-[#0066ff]", inverted: true },
+  {
+    label: "Current Academic Path",
+    value: "PURSUING MCA",
+    surface: "bg-[#0066ff]",
+    inverted: true,
+  },
 ];
 
 export const aboutNotes = [
@@ -199,7 +204,7 @@ export const socialLinks = [
 
 export const contactDetails = {
   email: "rajputshashank1563@gmail.com",
-  location: "Surat, Gujarat",
+  phone: "+91 9104297557",
   availability:
     "Open to placements, internships, and full stack developer opportunities where I can build scalable web applications and solve real product problems.",
 };

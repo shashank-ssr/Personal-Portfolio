@@ -1,8 +1,23 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Sticker from "./Sticker";
+import { openEmailWithFallback } from "../utils/openEmailWithFallback";
 
 export default function ContactNote({ contactDetails, socialLinks }) {
+  const codingProfiles = [
+    {
+      label: "HACKERRANK PROFILE",
+      href: "https://www.hackerrank.com/profile/rajputshashank12",
+      surface: "bg-[#ff3b3b]",
+      textClassName: "text-white",
+    },
+    {
+      label: "LEETCODE PROFILE",
+      href: "https://leetcode.com/u/shashank1563/",
+      surface: "bg-[#0066ff]",
+      textClassName: "text-white",
+    },
+  ];
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,13 +34,29 @@ export default function ContactNote({ contactDetails, socialLinks }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    const subject = encodeURIComponent(`Portfolio inquiry from ${formData.name || "a new contact"}`);
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nProject Type: ${formData.projectType}\n\n${formData.message}`
-    );
+    const subject = `Portfolio inquiry from ${formData.name || "a new contact"}`;
+    const body = `Name: ${formData.name}\nEmail: ${formData.email}\nProject Type: ${formData.projectType}\n\n${formData.message}`;
 
     setDidSubmit(true);
-    window.location.href = `mailto:${contactDetails.email}?subject=${subject}&body=${body}`;
+    openEmailWithFallback({
+      email: contactDetails.email,
+      subject,
+      body,
+    });
+  };
+
+  const handleEmailClick = (event) => {
+    event.preventDefault();
+    openEmailWithFallback({ email: contactDetails.email });
+  };
+
+  const handleSocialLinkClick = (event, href) => {
+    if (!href.startsWith("mailto:")) {
+      return;
+    }
+
+    event.preventDefault();
+    openEmailWithFallback({ email: contactDetails.email });
   };
 
   return (
@@ -100,7 +131,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
 
               {didSubmit ? (
                 <div className="border-4 border-black bg-[#ffe600] px-4 py-3 font-mono text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000]">
-                  Mail app should open with your draft.
+                  Opening your mail draft or Gmail compose.
                 </div>
               ) : null}
             </div>
@@ -113,11 +144,22 @@ export default function ContactNote({ contactDetails, socialLinks }) {
             <div className="mt-4 grid gap-3 font-mono text-sm">
               <div className="border-4 border-black bg-white px-4 py-3 shadow-[4px_4px_0_#000]">
                 <span className="font-display text-xl uppercase leading-none">Direct Contact</span>
-                <p className="mt-2 break-all">{contactDetails.email}</p>
+                <a
+                  href={`mailto:${contactDetails.email}`}
+                  onClick={handleEmailClick}
+                  className="mt-2 block break-all underline decoration-2 underline-offset-4"
+                >
+                  {contactDetails.email}
+                </a>
               </div>
               <div className="border-4 border-black bg-white px-4 py-3 shadow-[4px_4px_0_#000]">
-                <span className="font-display text-xl uppercase leading-none">Location</span>
-                <p className="mt-2">{contactDetails.location}</p>
+                <span className="font-display text-xl uppercase leading-none">Contact Number</span>
+                <a
+                  href={`tel:${contactDetails.phone.replace(/\s+/g, "")}`}
+                  className="mt-2 block text-base font-bold underline decoration-2 underline-offset-4"
+                >
+                  {contactDetails.phone}
+                </a>
               </div>
             </div>
           </div>
@@ -125,14 +167,28 @@ export default function ContactNote({ contactDetails, socialLinks }) {
           <div className="brutal-card -rotate-[1deg] bg-white p-5">
             <p className="font-display text-3xl uppercase leading-none">Professional Links</p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <Sticker tone="red">PLACEMENT READY</Sticker>
-              <Sticker tone="blue">RECRUITER FRIENDLY</Sticker>
+              {codingProfiles.map((profile) => (
+                <motion.a
+                  key={profile.label}
+                  href={profile.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  whileHover={{ scale: 1.04, rotate: -1 }}
+                  whileTap={{ scale: 0.97, y: 2 }}
+                  className={`border-4 border-black px-4 py-3 font-display text-xs uppercase tracking-[0.18em] shadow-[4px_4px_0_#000] ${profile.surface} ${profile.textClassName}`}
+                >
+                  {profile.label}
+                </motion.a>
+              ))}
             </div>
             <div className="mt-5 grid gap-3">
               {socialLinks.map((link) => (
                 <motion.a
                   key={link.label}
                   href={link.href}
+                  onClick={(event) => handleSocialLinkClick(event, link.href)}
+                  target={link.href.startsWith("http") ? "_blank" : undefined}
+                  rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                   whileHover={{ scale: 1.04, rotate: -1 }}
                   whileTap={{ scale: 0.97, y: 2 }}
                   className={`brutal-card flex items-center justify-between px-4 py-3 ${link.surface}`}

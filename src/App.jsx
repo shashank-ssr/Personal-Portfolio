@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import ContactNote from "./components/ContactNote";
 import CustomCursor from "./components/CustomCursor";
 import HandDrawnArrow from "./components/HandDrawnArrow";
@@ -18,6 +18,7 @@ import {
   stats,
   workflowNotes,
 } from "./data/portfolio";
+import { openEmailWithFallback } from "./utils/openEmailWithFallback";
 
 const revealProps = {
   initial: { opacity: 0, y: 40, rotate: -2 },
@@ -50,14 +51,57 @@ const floatingNotes = [
   },
 ];
 
+const mobileMenuCardSurfaces = ["bg-[#ffe600]", "bg-[#ff3b3b] text-white", "bg-[#0066ff] text-white", "bg-white"];
+
 export default function App() {
   const [activeProjectId, setActiveProjectId] = useState(projects[0].id);
   const [isDark, setIsDark] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const activeProject = projects.find((project) => project.id === activeProjectId) ?? projects[0];
 
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", isMobileMenuOpen);
+
+    return () => {
+      document.body.classList.remove("menu-open");
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleNavSelection = (sectionId) => {
+    scrollToSection(sectionId);
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleEmailStart = (event) => {
+    event.preventDefault();
+    openEmailWithFallback({ email: contactDetails.email });
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleSocialLinkClick = (event, href) => {
+    if (href.startsWith("mailto:")) {
+      event.preventDefault();
+      openEmailWithFallback({ email: contactDetails.email });
+    }
   };
 
   return (
@@ -80,7 +124,7 @@ export default function App() {
               <h1 className="font-display text-2xl uppercase leading-none sm:text-3xl">Full Stack Developer / MERN Stack</h1>
             </div>
 
-            <nav className="flex flex-wrap items-center gap-2">
+            <nav className="hidden flex-wrap items-center gap-2 md:flex">
               {navItems.map((item) => (
                 <motion.button
                   key={item.id}
@@ -95,20 +139,114 @@ export default function App() {
               ))}
             </nav>
 
-            <motion.button
-              type="button"
-              onClick={() => setIsDark((value) => !value)}
-              whileHover={{ scale: 1.05, rotate: -1 }}
-              whileTap={{ scale: 0.97, y: 2 }}
-              className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
-              aria-pressed={isDark}
-            >
-              {isDark ? "Light Mode" : "Dark Mode"}
-            </motion.button>
+            <div className="flex items-center gap-2 self-end md:self-auto">
+              <motion.button
+                type="button"
+                onClick={() => setIsDark((value) => !value)}
+                whileHover={{ scale: 1.05, rotate: -1 }}
+                whileTap={{ scale: 0.97, y: 2 }}
+                className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
+                aria-pressed={isDark}
+              >
+                {isDark ? "Light Mode" : "Dark Mode"}
+              </motion.button>
+
+              <motion.button
+                type="button"
+                onClick={() => setIsMobileMenuOpen((value) => !value)}
+                whileHover={{ scale: 1.05, rotate: 1 }}
+                whileTap={{ scale: 0.97, y: 2 }}
+                className="brutal-card flex min-h-14 min-w-22 flex-col items-center justify-center bg-[#ff3b3b] px-3 py-2 text-white md:hidden"
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-controls="mobile-brutal-menu"
+                aria-expanded={isMobileMenuOpen}
+              >
+                <span className="font-display text-[10px] uppercase tracking-[0.24em]">Block</span>
+                <span className="font-display text-lg uppercase leading-none">Menu</span>
+              </motion.button>
+            </div>
           </motion.header>
 
+          <AnimatePresence>
+            {isMobileMenuOpen ? (
+              <motion.div
+                className="fixed inset-0 z-50 bg-black/55 p-4 md:hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <motion.aside
+                  id="mobile-brutal-menu"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="mobile-menu-title"
+                  className="brutal-card flex h-full flex-col overflow-y-auto bg-white p-4"
+                  initial={{ y: 24, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 24, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 180, damping: 20 }}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="font-mono text-[11px] uppercase tracking-[0.3em]">Mobile Navigation</p>
+                      <h2 id="mobile-menu-title" className="mt-2 font-display text-4xl uppercase leading-none">
+                        Stacked Panel Menu
+                      </h2>
+                    </div>
+
+                    <motion.button
+                      type="button"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      whileHover={{ scale: 1.05, rotate: -1 }}
+                      whileTap={{ scale: 0.97, y: 2 }}
+                      className="border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[4px_4px_0_#000]"
+                      aria-label="Close navigation menu"
+                    >
+                      Close
+                    </motion.button>
+                  </div>
+
+                  <div className="mt-6 grid gap-4">
+                    {navItems.map((item, index) => {
+                      const surface = mobileMenuCardSurfaces[index % mobileMenuCardSurfaces.length];
+                      const textClassName = surface.includes("text-white") ? "text-white" : "text-black";
+
+                      return (
+                        <motion.button
+                          key={item.id}
+                          type="button"
+                          onClick={() => handleNavSelection(item.id)}
+                          whileHover={{ scale: 1.02, rotate: index % 2 === 0 ? 1 : -1 }}
+                          whileTap={{ scale: 0.97, y: 2 }}
+                          className={`brutal-card flex w-full items-center justify-between px-4 py-4 ${surface}`}
+                        >
+                          <span className={`font-display text-2xl uppercase leading-none ${textClassName}`}>{item.label}</span>
+                          <span className={`font-mono text-xs uppercase tracking-[0.18em] ${textClassName}`}>Open</span>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-auto grid gap-3 pt-6">
+                    <motion.a
+                      href={`mailto:${contactDetails.email}`}
+                      onClick={handleEmailStart}
+                      whileHover={{ scale: 1.03, rotate: 1 }}
+                      whileTap={{ scale: 0.97, y: 2 }}
+                      className="brutal-card bg-[#ffe600] px-4 py-4"
+                    >
+                      <span className="font-display text-2xl uppercase leading-none">Start A Conversation</span>
+                    </motion.a>
+                  </div>
+                </motion.aside>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+
           <main className="space-y-18">
-            <section id="hero" className="relative grid gap-8 pb-6 pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+            <section id="hero" className="scroll-mt-28 relative grid gap-8 pb-6 pt-4 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
               <div className="absolute inset-0 hidden xl:block">
                 {floatingNotes.map((note) => (
                   <motion.div
@@ -130,7 +268,9 @@ export default function App() {
                 <Tape position="left" />
                 <Tape position="right" />
 
-                <p className="font-mono text-xs uppercase tracking-[0.35em]">BCA Graduate / MCA In Progress / MERN Stack Developer</p>
+                <p className="font-mono text-xs uppercase tracking-[0.35em]">
+                  BCA Graduate / Currently Pursuing A Master Of Computer Applications (MCA) / MERN Stack Developer
+                </p>
                 <h2 className="mt-4 font-display text-[clamp(3.15rem,8vw,7.8rem)] uppercase leading-[0.88]">
                   Hi, I&apos;m Shashank
                   <span className="block">Full Stack Developer</span>
@@ -163,6 +303,7 @@ export default function App() {
                   </motion.button>
                   <motion.a
                     href={`mailto:${contactDetails.email}`}
+                    onClick={handleEmailStart}
                     whileHover={{ scale: 1.05, rotate: -1 }}
                     whileTap={{ scale: 0.97, y: 2 }}
                     className="border-4 border-black bg-[#ffe600] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] shadow-[5px_5px_0_#000]"
@@ -185,8 +326,8 @@ export default function App() {
                     I Build Scalable, User-Focused Web Applications That Solve Real Problems
                   </p>
                   <p className="mt-4 font-mono text-sm leading-relaxed">
-                    From full stack platforms to live business websites, I focus on usability, responsive design, clean
-                    implementation, and practical product value.
+                    I develop scalable full-stack applications and live business websites that prioritize usability,
+                    responsive design, and reliable engineering for real-world impact.
                   </p>
                 </motion.div>
 
@@ -202,7 +343,9 @@ export default function App() {
                       whileTap={{ scale: 0.97, y: 2 }}
                       className={`brutal-card p-4 ${stat.surface}`}
                     >
-                      <p className={`font-display text-3xl uppercase leading-none ${stat.inverted ? "text-white" : ""}`}>{stat.value}</p>
+                      <p className={`font-display text-3xl uppercase leading-none ${stat.inverted ? "text-white" : ""}`}>
+                        {stat.value}
+                      </p>
                       <p className={`mt-2 font-mono text-[11px] uppercase tracking-[0.2em] ${stat.inverted ? "text-white" : ""}`}>
                         {stat.label}
                       </p>
@@ -217,9 +360,10 @@ export default function App() {
                 >
                   <p className="font-mono text-xs uppercase tracking-[0.28em]">Currently Focused On</p>
                   <div className="mt-4 flex flex-wrap gap-3">
-                    <Sticker tone="red">Building Production-Ready Full Stack Apps</Sticker>
-                    <Sticker tone="yellow">Improving Data Structures &amp; Problem Solving</Sticker>
-                    <Sticker tone="blue">Learning Scalable System Design</Sticker>
+                    <Sticker tone="red">Building Production-Ready Full-Stack Applications</Sticker>
+                    <Sticker tone="blue">Writing Clean, Maintainable, And Efficient Code</Sticker>
+                    <Sticker tone="white">Improving Data Structures And Problem-Solving Skills</Sticker>
+                    <Sticker tone="yellow">Designing User-Focused And Responsive Interfaces</Sticker>
                   </div>
 
                   <div className="mt-5 grid gap-2">
@@ -227,6 +371,9 @@ export default function App() {
                       <motion.a
                         key={link.label}
                         href={link.href}
+                        onClick={(event) => handleSocialLinkClick(event, link.href)}
+                        target={link.href.startsWith("http") ? "_blank" : undefined}
+                        rel={link.href.startsWith("http") ? "noreferrer" : undefined}
                         whileHover={{ scale: 1.03, rotate: 1 }}
                         whileTap={{ scale: 0.97, y: 2 }}
                         className={`brutal-card flex items-center justify-between px-4 py-3 ${link.surface}`}
@@ -240,11 +387,11 @@ export default function App() {
               </div>
             </section>
 
-            <motion.section id="about" {...revealProps} className="space-y-6">
+            <motion.section id="about" {...revealProps} className="scroll-mt-28 space-y-6">
               <SectionTitle
                 kicker="Notebook Bio"
                 title="About"
-                subtitle="ATS-focused summary of my full stack development background, technical strengths, and project-driven approach."
+                subtitle="A full-stack developer focused on building scalable, user-centric applications with clean architecture and real-world impact."
                 accent="red"
                 className={isDark ? "text-white" : "text-black"}
               />
@@ -255,9 +402,9 @@ export default function App() {
                   <p className="font-display text-4xl uppercase leading-none sm:text-5xl">Full Stack Development With Real-World Focus.</p>
                   <div className="mt-6 space-y-5 font-mono text-sm leading-relaxed sm:text-base">
                     <p>
-                      I am <span className="marker-yellow ml-2">Shashank Singh</span>, a BCA graduate currently pursuing MCA,
-                      with hands-on experience building <span className="marker-blue ml-2 text-white">full stack web applications</span>
-                      using MongoDB, Express.js, React.js, and Node.js.
+                      I am <span className="marker-yellow ml-2">Shashank Singh</span>, a BCA graduate currently pursuing a
+                      <span className="marker-blue ml-2 text-white">Master of Computer Applications (MCA)</span>, with
+                      hands-on experience building full stack web applications using MongoDB, Express.js, React.js, and Node.js.
                     </p>
                     <p>
                       My work includes developing responsive interfaces with React.js, building backend logic with Node.js and
@@ -287,7 +434,7 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="projects" {...revealProps} className="space-y-6">
+            <motion.section id="projects" {...revealProps} className="scroll-mt-28 relative z-10 space-y-6 overflow-visible">
               <SectionTitle
                 kicker="Scrap Stack"
                 title="Projects"
@@ -296,7 +443,7 @@ export default function App() {
                 className={isDark ? "text-white" : "text-black"}
               />
 
-              <div className="grid gap-6 xl:grid-cols-2">
+              <div className="grid items-start gap-6 xl:grid-cols-2">
                 {projects.map((project) => (
                   <ScrapCard
                     key={project.id}
@@ -310,7 +457,7 @@ export default function App() {
 
               <motion.aside
                 layout
-                className="brutal-card ml-auto max-w-3xl rotate-[1deg] bg-[#ffe600] p-5"
+                className="brutal-card ml-auto w-full max-w-3xl rotate-[1deg] bg-[#ffe600] p-5"
                 whileHover={{ scale: 1.03, rotate: 1.2 }}
               >
                 <p className="font-mono text-xs uppercase tracking-[0.28em]">Project Snapshot</p>
@@ -319,7 +466,7 @@ export default function App() {
               </motion.aside>
             </motion.section>
 
-            <motion.section id="skills" {...revealProps} className="space-y-6">
+            <motion.section id="skills" {...revealProps} className="scroll-mt-28 space-y-6">
               <SectionTitle
                 kicker="Sticker Sheet"
                 title="Skills"
@@ -362,7 +509,7 @@ export default function App() {
               </div>
             </motion.section>
 
-            <motion.section id="contact" {...revealProps} className="space-y-6">
+            <motion.section id="contact" {...revealProps} className="scroll-mt-28 space-y-6">
               <SectionTitle
                 kicker="Pinned Note"
                 title="Contact"
