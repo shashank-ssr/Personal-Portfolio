@@ -2,14 +2,16 @@ import { AnimatePresence, motion } from "framer-motion";
 import ProjectPreview from "./ProjectPreview";
 import Sticker from "./Sticker";
 import Tape from "./Tape";
+import useCanHover from "../hooks/useCanHover";
 
 export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
+  const canHover = useCanHover();
   const textTone = project.surface === "bg-[#0066ff]" ? "text-white" : "text-black";
 
   return (
     <motion.article
       layout
-      whileHover={{ scale: 1.02, rotate: 1 }}
+      {...(canHover ? { whileHover: { scale: 1.02, rotate: 1 } } : {})}
       whileTap={{ scale: 0.98, y: 3 }}
       className={`brutal-card relative w-full max-w-full min-w-0 overflow-hidden p-5 pt-8 sm:overflow-visible sm:p-6 ${project.surface} ${project.rotation}`}
       onMouseEnter={onFocus}
@@ -19,10 +21,10 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
 
       <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className={`font-mono text-xs uppercase tracking-[0.3em] ${textTone}`}>{project.label}</p>
+          <p className={`break-words font-mono text-xs uppercase tracking-[0.3em] ${textTone}`}>{project.label}</p>
           <h3 className={`mt-2 break-words font-display text-4xl uppercase leading-none sm:text-5xl ${textTone}`}>{project.title}</h3>
         </div>
-        <span className={`self-start font-mono text-xs uppercase tracking-[0.2em] ${textTone}`}>{project.year}</span>
+        <span className={`self-start break-words font-mono text-xs uppercase tracking-[0.2em] ${textTone}`}>{project.year}</span>
       </div>
 
       <div className="mt-5">
@@ -42,7 +44,7 @@ export default function ScrapCard({ project, isActive, onToggle, onFocus }) {
       <motion.button
         type="button"
         onClick={onToggle}
-        whileHover={{ scale: 1.05, rotate: -1 }}
+        {...(canHover ? { whileHover: { scale: 1.05, rotate: -1 } } : {})}
         whileTap={{ scale: 0.97, y: 2 }}
         className="mt-6 w-full max-w-full border-4 border-black bg-white px-4 py-3 font-display text-xs uppercase tracking-[0.2em] shadow-[2px_2px_0_#000] sm:w-auto sm:shadow-[4px_4px_0_#000]"
         aria-expanded={isActive}

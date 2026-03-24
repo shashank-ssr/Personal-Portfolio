@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import useCanHover from "../hooks/useCanHover";
 import { openEmailWithFallback } from "../utils/openEmailWithFallback";
 
 export default function ContactNote({ contactDetails, socialLinks }) {
+  const canHover = useCanHover();
   const codingProfiles = [
     {
       label: "HACKERRANK PROFILE",
@@ -122,7 +124,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05, rotate: 1 }}
+                {...(canHover ? { whileHover: { scale: 1.05, rotate: 1 } } : {})}
                 whileTap={{ scale: 0.97, y: 2 }}
                 className="w-full max-w-full border-4 border-black bg-[#ff3b3b] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] text-white shadow-[3px_3px_0_#000] sm:w-auto sm:shadow-[5px_5px_0_#000]"
               >
@@ -173,7 +175,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                   href={profile.href}
                   target="_blank"
                   rel="noreferrer"
-                  whileHover={{ scale: 1.04, rotate: -1 }}
+                  {...(canHover ? { whileHover: { scale: 1.04, rotate: -1 } } : {})}
                   whileTap={{ scale: 0.97, y: 2 }}
                   className={`w-full max-w-full border-4 border-black px-4 py-3 text-center font-display text-xs uppercase tracking-[0.18em] shadow-[2px_2px_0_#000] sm:w-auto sm:text-left sm:shadow-[4px_4px_0_#000] ${profile.surface} ${profile.textClassName}`}
                 >
@@ -189,7 +191,7 @@ export default function ContactNote({ contactDetails, socialLinks }) {
                   onClick={(event) => handleSocialLinkClick(event, link.href)}
                   target={link.href.startsWith("http") ? "_blank" : undefined}
                   rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                  whileHover={{ scale: 1.04, rotate: -1 }}
+                  {...(canHover ? { whileHover: { scale: 1.04, rotate: -1 } } : {})}
                   whileTap={{ scale: 0.97, y: 2 }}
                   className={`brutal-card flex w-full max-w-full flex-col items-start gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${link.surface}`}
                 >

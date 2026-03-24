@@ -1,12 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import ContactNote from "./components/ContactNote";
 import CustomCursor from "./components/CustomCursor";
-import HandDrawnArrow from "./components/HandDrawnArrow";
-import ScrapCard from "./components/ScrapCard";
+import DesktopPortfolio from "./components/DesktopPortfolio";
+import ProjectPreview from "./components/ProjectPreview";
 import SectionTitle from "./components/SectionTitle";
 import Sticker from "./components/Sticker";
-import Tape from "./components/Tape";
+import useCanHover from "./hooks/useCanHover";
 import {
   aboutNotes,
   contactDetails,
@@ -20,58 +19,128 @@ import {
 } from "./data/portfolio";
 import { openEmailWithFallback } from "./utils/openEmailWithFallback";
 
-const desktopRevealProps = {
-  initial: { opacity: 0, y: 40, rotate: -2 },
-  whileInView: { opacity: 1, y: 0, rotate: 0 },
-  viewport: { once: true, amount: 0.2 },
-  transition: { type: "spring", stiffness: 140, damping: 18, duration: 0.55 },
-};
-
 const mobileRevealProps = {
   initial: { opacity: 0, y: 22 },
   animate: { opacity: 1, y: 0 },
   transition: { type: "spring", stiffness: 170, damping: 20, duration: 0.42 },
 };
 
-const floatingNotes = [
-  {
-    id: "roles",
-    text: "OPEN TO FULL STACK ROLES",
-    tone: "yellow",
-    className: "left-0 top-12 -rotate-[8deg]",
-    duration: 4.6,
-  },
-  {
-    id: "responsive",
-    text: "MERN STACK BUILDS",
-    tone: "red",
-    className: "right-2 top-4 rotate-[7deg]",
-    duration: 5.1,
-  },
-  {
-    id: "chaos",
-    text: "RESPONSIVE DESIGN",
-    tone: "blue",
-    className: "right-12 bottom-6 -rotate-[5deg]",
-    duration: 4.8,
-  },
+const mobileMenuCardSurfaces = ["bg-[#ffe600]", "bg-[#ff3b3b] text-white", "bg-[#0066ff] text-white", "bg-white"];
+
+const codingProfiles = [
+  { label: "HACKERRANK PROFILE", href: "https://www.hackerrank.com/profile/rajputshashank12", surface: "bg-[#ff3b3b]", textClassName: "text-white" },
+  { label: "LEETCODE PROFILE", href: "https://leetcode.com/u/shashank1563/", surface: "bg-[#0066ff]", textClassName: "text-white" },
 ];
 
-const mobileMenuCardSurfaces = ["bg-[#ffe600]", "bg-[#ff3b3b] text-white", "bg-[#0066ff] text-white", "bg-white"];
+function MobileProjectCard({ project, canHover }) {
+  const textTone = project.surface === "bg-[#0066ff]" ? "text-white" : "text-black";
+
+  return (
+    <motion.article
+      {...mobileRevealProps}
+      {...(canHover ? { whileHover: { scale: 1.01 } } : {})}
+      whileTap={{ scale: 0.99, y: 1 }}
+      className={`brutal-card w-full overflow-hidden p-5 ${project.surface}`}
+    >
+      <p className={`break-words font-mono text-[10px] uppercase tracking-[0.22em] ${textTone}`}>{project.label}</p>
+      <h3 className={`mt-2 break-words font-display text-3xl uppercase leading-none ${textTone}`}>{project.title}</h3>
+      <span className={`mt-2 break-words font-mono text-[11px] uppercase tracking-[0.18em] ${textTone}`}>{project.year}</span>
+
+      <div className="mt-4">
+        <ProjectPreview preview={project.preview} />
+      </div>
+
+      <p className={`mt-4 font-mono text-sm leading-relaxed ${textTone}`}>{project.summary}</p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {project.tech.map((item, index) => (
+          <Sticker key={item} tone={index % 3 === 0 ? "yellow" : index % 3 === 1 ? "red" : "blue"}>
+            {item}
+          </Sticker>
+        ))}
+      </div>
+
+      <div className="mt-4 grid gap-2">
+        {project.details.map((detail) => (
+          <div key={detail} className="border-4 border-black bg-white px-4 py-3 font-mono text-sm leading-relaxed text-black">
+            {detail}
+          </div>
+        ))}
+      </div>
+    </motion.article>
+  );
+}
+
+function MobileContactCard({ canHover, onEmailStart, onSocialLinkClick }) {
+  return (
+    <motion.article {...mobileRevealProps} className="brutal-card w-full overflow-hidden bg-white p-5">
+      <p className="font-display text-3xl uppercase leading-none">Let&apos;s Build Something Solid.</p>
+      <p className="mt-3 font-mono text-sm leading-relaxed">{contactDetails.availability}</p>
+
+      <div className="mt-5 grid gap-3">
+        <motion.a
+          href={`mailto:${contactDetails.email}`}
+          onClick={onEmailStart}
+          {...(canHover ? { whileHover: { scale: 1.02 } } : {})}
+          whileTap={{ scale: 0.98, y: 1 }}
+          className="border-4 border-black bg-[#ff3b3b] px-4 py-4 font-display text-sm uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000]"
+        >
+          Start Email Conversation
+        </motion.a>
+
+        <a
+          href={`tel:${contactDetails.phone.replace(/\s+/g, "")}`}
+          className="border-4 border-black bg-[#ffe600] px-4 py-4 font-display text-sm uppercase tracking-[0.18em] shadow-[2px_2px_0_#000]"
+        >
+          Call: {contactDetails.phone}
+        </a>
+      </div>
+
+      <div className="mt-5 grid gap-3">
+        {codingProfiles.map((profile) => (
+          <motion.a
+            key={profile.label}
+            href={profile.href}
+            target="_blank"
+            rel="noreferrer"
+            {...(canHover ? { whileHover: { scale: 1.02 } } : {})}
+            whileTap={{ scale: 0.98, y: 1 }}
+            className={`border-4 border-black px-4 py-4 font-display text-sm uppercase tracking-[0.16em] shadow-[2px_2px_0_#000] ${profile.surface} ${profile.textClassName}`}
+          >
+            {profile.label}
+          </motion.a>
+        ))}
+
+        {socialLinks.map((link) => (
+          <motion.a
+            key={link.label}
+            href={link.href}
+            onClick={(event) => onSocialLinkClick(event, link.href)}
+            target={link.href.startsWith("http") ? "_blank" : undefined}
+            rel={link.href.startsWith("http") ? "noreferrer" : undefined}
+            {...(canHover ? { whileHover: { scale: 1.02 } } : {})}
+            whileTap={{ scale: 0.98, y: 1 }}
+            className={`brutal-card flex w-full flex-col gap-2 px-4 py-4 ${link.surface}`}
+          >
+            <span className={`font-display text-2xl uppercase leading-none ${link.inverted ? "text-white" : ""}`}>{link.label}</span>
+            <span className={`break-all font-mono text-xs uppercase tracking-[0.18em] ${link.inverted ? "text-white" : ""}`}>{link.meta}</span>
+          </motion.a>
+        ))}
+      </div>
+    </motion.article>
+  );
+}
 
 export default function App() {
   const [activeProjectId, setActiveProjectId] = useState(projects[0].id);
   const [isDark, setIsDark] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileViewport, setIsMobileViewport] = useState(false);
-
-  const activeProject = projects.find((project) => project.id === activeProjectId) ?? projects[0];
-  const revealProps = isMobileViewport ? mobileRevealProps : desktopRevealProps;
+  const [isMobileViewport, setIsMobileViewport] = useState(() => (typeof window !== "undefined" ? window.innerWidth < 768 : false));
+  const canHover = useCanHover();
 
   useEffect(() => {
     const syncViewportState = () => {
       const isMobile = window.innerWidth < 768;
-
       setIsMobileViewport(isMobile);
 
       if (!isMobile) {
@@ -82,9 +151,7 @@ export default function App() {
     syncViewportState();
     window.addEventListener("resize", syncViewportState);
 
-    return () => {
-      window.removeEventListener("resize", syncViewportState);
-    };
+    return () => window.removeEventListener("resize", syncViewportState);
   }, []);
 
   const scrollToSection = (sectionId) => {
@@ -115,416 +182,102 @@ export default function App() {
 
       <div className="paper-texture min-h-screen w-full overflow-x-hidden text-black transition-colors duration-300">
         <div className="mx-auto w-full max-w-full overflow-x-hidden px-4 sm:px-6 md:px-8">
-          <div className="mx-auto w-full max-w-7xl pb-20 pt-4">
-          <motion.header
-            className="brutal-card relative z-40 mb-6 w-full overflow-x-clip bg-white px-4 py-4 md:sticky md:top-4 md:mb-8"
-            initial={{ y: -18, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.4 }}
-          >
-            <Tape position="left" />
-            <Tape position="right" />
-
-            <div className="flex min-w-0 flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="min-w-0 shrink pr-2">
-                <p className="font-mono text-[10px] uppercase tracking-[0.28em] sm:text-[11px]">Shashank Singh Portfolio</p>
-                <h1 className="mt-1 break-words font-display text-xl uppercase leading-none sm:text-2xl lg:text-3xl">
-                  Full Stack Developer / MERN Stack
-                </h1>
-              </div>
-
-              <nav className="hidden flex-wrap items-center gap-2 md:flex">
-                {navItems.map((item) => (
-                  <motion.button
-                    key={item.id}
-                  type="button"
-                  onClick={() => scrollToSection(item.id)}
-                  whileHover={{ scale: 1.05, rotate: 1 }}
-                  whileTap={{ scale: 0.97, y: 2 }}
-                  className="border-4 border-black bg-[#ffe600] px-3 py-2 font-display text-xs uppercase tracking-[0.18em] shadow-[2px_2px_0_#000] transition-transform sm:shadow-[4px_4px_0_#000]"
-                >
-                  {item.label}
-                </motion.button>
-                ))}
-              </nav>
-
-              <div className="hidden items-center gap-2 md:flex">
-                <motion.button
-                  type="button"
-                  onClick={() => setIsDark((value) => !value)}
-                  whileHover={{ scale: 1.05, rotate: -1 }}
-                  whileTap={{ scale: 0.97, y: 2 }}
-                  className="border-4 border-black bg-[#0066ff] px-4 py-2 font-display text-xs uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
-                  aria-pressed={isDark}
-                >
-                  {isDark ? "Light Mode" : "Dark Mode"}
-                </motion.button>
-              </div>
-            </div>
-
-            <div className="mt-4 grid gap-3 md:hidden">
-              <div className="brutal-card rotate-0 bg-[#ffe600] px-3 py-3 sm:-rotate-[1deg]">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="min-w-0 flex-1">
-                    <p className="font-display text-lg uppercase leading-none">Quick Navigation</p>
-                  </div>
-
-                  <div className="flex max-w-full shrink-0 flex-wrap justify-end gap-2">
-                    <motion.button
-                      type="button"
-                      onClick={() => setIsDark((value) => !value)}
-                      whileHover={{ scale: 1.04, rotate: -1 }}
-                      whileTap={{ scale: 0.97, y: 2 }}
-                      className="border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-[10px] uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
-                      aria-pressed={isDark}
-                    >
+          <div className="mx-auto w-full max-w-7xl pt-4">
+            {isMobileViewport ? (
+              <>
+                <motion.header className="brutal-card mb-5 overflow-hidden bg-white px-4 py-4" initial={{ y: -18, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.35 }}>
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.24em]">Shashank Singh Portfolio</p>
+                      <h1 className="mt-2 break-words font-display text-3xl uppercase leading-none">Full Stack Developer / MERN Stack</h1>
+                    </div>
+                    <motion.button type="button" onClick={() => setIsDark((value) => !value)} whileTap={{ scale: 0.97, y: 1 }} className="shrink-0 border-4 border-black bg-[#0066ff] px-3 py-2 font-display text-[10px] uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000]" aria-pressed={isDark}>
                       {isDark ? "Light" : "Dark"}
                     </motion.button>
+                  </div>
 
-                    <motion.button
-                      type="button"
-                      onClick={() => setIsMobileMenuOpen((value) => !value)}
-                      whileHover={{ scale: 1.04, rotate: 1 }}
-                      whileTap={{ scale: 0.97, y: 2 }}
-                      className="border-4 border-black bg-[#ff3b3b] px-3 py-2 font-display text-[10px] uppercase tracking-[0.2em] text-white shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]"
-                      aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-                      aria-controls="mobile-notice-menu"
-                      aria-expanded={isMobileMenuOpen}
-                    >
-                      {isMobileMenuOpen ? "Hide Menu" : "Open Menu"}
+                  <div className="mt-4 grid gap-3">
+                    <motion.button type="button" onClick={() => setIsMobileMenuOpen((value) => !value)} whileTap={{ scale: 0.98, y: 1 }} className="border-4 border-black bg-[#ffe600] px-4 py-3 text-left font-display text-sm uppercase tracking-[0.18em] shadow-[2px_2px_0_#000]" aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"} aria-controls="mobile-portfolio-menu" aria-expanded={isMobileMenuOpen}>
+                      {isMobileMenuOpen ? "Close Navigation" : "Open Navigation"}
                     </motion.button>
+
+                    <AnimatePresence initial={false}>
+                      {isMobileMenuOpen ? (
+                        <motion.div id="mobile-portfolio-menu" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.28, ease: "easeOut" }} className="overflow-hidden">
+                          <div className="grid gap-3">
+                            {navItems.map((item, index) => {
+                              const surface = mobileMenuCardSurfaces[index % mobileMenuCardSurfaces.length];
+                              const textClassName = surface.includes("text-white") ? "text-white" : "text-black";
+
+                              return (
+                                <motion.button key={item.id} type="button" onClick={() => handleNavSelection(item.id)} whileTap={{ scale: 0.98, y: 1 }} className={`brutal-card flex w-full items-center justify-between px-4 py-4 ${surface}`}>
+                                  <span className={`font-display text-xl uppercase leading-none ${textClassName}`}>{item.label}</span>
+                                  <span className={`font-mono text-[10px] uppercase tracking-[0.18em] ${textClassName}`}>Jump</span>
+                                </motion.button>
+                              );
+                            })}
+                          </div>
+                        </motion.div>
+                      ) : null}
+                    </AnimatePresence>
                   </div>
-                </div>
-              </div>
+                </motion.header>
 
-              <AnimatePresence initial={false}>
-                {isMobileMenuOpen ? (
-                  <motion.div
-                    key="mobile-notice-menu"
-                    id="mobile-notice-menu"
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="overflow-hidden"
-                  >
-                    <div className="grid gap-3">
-                      {navItems.map((item, index) => {
-                        const surface = mobileMenuCardSurfaces[index % mobileMenuCardSurfaces.length];
-                        const textClassName = surface.includes("text-white") ? "text-white" : "text-black";
-
-                        return (
-                          <motion.button
-                            key={item.id}
-                            type="button"
-                            onClick={() => handleNavSelection(item.id)}
-                            whileHover={{ scale: 1.02, rotate: index % 2 === 0 ? 1 : -1 }}
-                            whileTap={{ scale: 0.97, y: 2 }}
-                            className={`brutal-card flex w-full items-center justify-between px-4 py-4 ${surface}`}
-                          >
-                            <span className={`font-display text-xl uppercase leading-none ${textClassName}`}>{item.label}</span>
-                            <span className={`font-mono text-[10px] uppercase tracking-[0.18em] ${textClassName}`}>Jump</span>
-                          </motion.button>
-                        );
-                      })}
-
-                      <motion.a
-                        href={`mailto:${contactDetails.email}`}
-                        onClick={handleEmailStart}
-                        whileHover={{ scale: 1.03, rotate: 1 }}
-                        whileTap={{ scale: 0.97, y: 2 }}
-                        className="brutal-card bg-white px-4 py-4"
-                      >
-                        <span className="font-display text-xl uppercase leading-none">Start A Conversation</span>
-                      </motion.a>
-                    </div>
-                  </motion.div>
-                ) : null}
-              </AnimatePresence>
-            </div>
-          </motion.header>
-
-          <main className="w-full max-w-full min-w-0 space-y-18">
-            <section id="hero" className="scroll-mt-20 relative grid w-full min-w-0 gap-8 pb-6 pt-2 md:scroll-mt-28 md:pt-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
-              <div className="absolute inset-0 hidden xl:block">
-                {floatingNotes.map((note) => (
-                  <motion.div
-                    key={note.id}
-                    className={`absolute ${note.className}`}
-                    animate={{ y: [0, -5, 3, 0], rotate: [0, 1, -1, 0] }}
-                    transition={{ duration: note.duration, repeat: Infinity, ease: "easeInOut" }}
-                    whileHover={{ scale: 1.08 }}
-                  >
-                    <Sticker tone={note.tone}>{note.text}</Sticker>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.div
-                {...revealProps}
-                className="brutal-card relative min-w-0 bg-white p-6 sm:p-8 lg:p-10"
-              >
-                <Tape position="left" />
-                <Tape position="right" />
-
-                <p className="max-w-full break-words font-mono text-xs uppercase tracking-[0.22em] sm:tracking-[0.35em]">
-                  BCA Graduate / Currently Pursuing A Master Of Computer Applications (MCA) / MERN Stack Developer
-                </p>
-                <h2 className="mt-4 break-words font-display text-[clamp(2.7rem,15vw,4.9rem)] uppercase leading-[0.88] sm:text-[clamp(3.15rem,8vw,7.8rem)]">
-                  Hi, I&apos;m Shashank
-                  <span className="block">Full Stack Developer</span>
-                  <span className="block text-[#ff3b3b]">I Build Scalable Web Applications</span>
-                </h2>
-                <p className="mt-5 max-w-2xl font-mono text-sm leading-relaxed sm:text-base">
-                  I build full stack web applications using the <span className="marker-yellow">MERN stack</span>, with a
-                  focus on <span className="marker-blue ml-2 text-white">React.js frontend engineering</span>,
-                  <span className="marker-red ml-2 text-white">Node.js backend development</span>, REST APIs, and real-world
-                  problem solving.
-                </p>
-
-                <div className="mt-7 flex flex-wrap gap-3">
-                  {heroBadges.map((badge) => (
-                    <Sticker key={badge.text} tone={badge.tone} className={badge.rotation}>
-                      {badge.text}
-                    </Sticker>
-                  ))}
-                </div>
-
-                <div className="mt-8 flex flex-wrap gap-4">
-                  <motion.button
-                  type="button"
-                  onClick={() => scrollToSection("projects")}
-                  whileHover={{ scale: 1.05, rotate: 1 }}
-                  whileTap={{ scale: 0.97, y: 2 }}
-                  className="border-4 border-black bg-[#ff3b3b] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] text-white shadow-[3px_3px_0_#000] sm:shadow-[5px_5px_0_#000]"
-                >
-                  See Projects
-                </motion.button>
-                  <motion.a
-                    href={`mailto:${contactDetails.email}`}
-                    onClick={handleEmailStart}
-                    whileHover={{ scale: 1.05, rotate: -1 }}
-                    whileTap={{ scale: 0.97, y: 2 }}
-                    className="border-4 border-black bg-[#ffe600] px-5 py-3 font-display text-sm uppercase tracking-[0.2em] shadow-[3px_3px_0_#000] sm:shadow-[5px_5px_0_#000]"
-                  >
-                    Start A Conversation
-                  </motion.a>
-                </div>
-
-                <HandDrawnArrow className="pointer-events-none absolute -bottom-11 right-6 hidden lg:block" />
-              </motion.div>
-
-              <div className="grid min-w-0 gap-5 pt-4 lg:pt-10">
-                <motion.div
-                  {...revealProps}
-                  transition={{ ...revealProps.transition, delay: 0.08 }}
-                  className="brutal-card min-w-0 rotate-0 bg-[#ffe600] p-5 sm:rotate-[2deg]"
-                >
-                  <Tape position="center" />
-                  <p className="font-display text-4xl uppercase leading-none sm:text-5xl">
-                    I Build Scalable, User-Focused Web Applications That Solve Real Problems
-                  </p>
-                  <p className="mt-4 font-mono text-sm leading-relaxed">
-                    I develop scalable full-stack applications and live business websites that prioritize usability,
-                    responsive design, and reliable engineering for real-world impact.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  {...revealProps}
-                  transition={{ ...revealProps.transition, delay: 0.16 }}
-                  className="grid gap-4 sm:grid-cols-3"
-                >
-                  {stats.map((stat) => (
-                    <motion.article
-                      key={stat.label}
-                      whileHover={{ scale: 1.05, rotate: 1 }}
-                      whileTap={{ scale: 0.97, y: 2 }}
-                      className={`brutal-card p-4 ${stat.surface}`}
-                    >
-                      <p className={`font-display text-3xl uppercase leading-none ${stat.inverted ? "text-white" : ""}`}>
-                        {stat.value}
-                      </p>
-                      <p className={`mt-2 font-mono text-[11px] uppercase tracking-[0.2em] ${stat.inverted ? "text-white" : ""}`}>
-                        {stat.label}
-                      </p>
-                    </motion.article>
-                  ))}
-                </motion.div>
-
-                <motion.div
-                  {...revealProps}
-                  transition={{ ...revealProps.transition, delay: 0.24 }}
-                  className="brutal-card min-w-0 rotate-0 bg-white p-5 sm:-rotate-[1deg]"
-                >
-                  <p className="font-mono text-xs uppercase tracking-[0.28em]">Currently Focused On</p>
-                  <div className="mt-4 flex flex-wrap gap-3">
-                    <Sticker tone="red">Building Production-Ready Full-Stack Applications</Sticker>
-                    <Sticker tone="blue">Writing Clean, Maintainable, And Efficient Code</Sticker>
-                    <Sticker tone="white">Improving Data Structures And Problem-Solving Skills</Sticker>
-                    <Sticker tone="yellow">Designing User-Focused And Responsive Interfaces</Sticker>
-                  </div>
-
-                  <div className="mt-5 grid gap-2">
-                    {socialLinks.map((link) => (
-                      <motion.a
-                        key={link.label}
-                        href={link.href}
-                        onClick={(event) => handleSocialLinkClick(event, link.href)}
-                        target={link.href.startsWith("http") ? "_blank" : undefined}
-                        rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                        whileHover={{ scale: 1.03, rotate: 1 }}
-                        whileTap={{ scale: 0.97, y: 2 }}
-                        className={`brutal-card flex flex-col items-start gap-2 px-4 py-3 sm:flex-row sm:items-center sm:justify-between ${link.surface}`}
-                      >
-                        <span className={`font-display text-lg uppercase ${link.inverted ? "text-white" : ""}`}>{link.label}</span>
-                        <span className={`font-mono text-xs uppercase tracking-[0.2em] ${link.inverted ? "text-white" : ""}`}>{link.meta}</span>
-                      </motion.a>
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
-            </section>
-
-            <motion.section id="about" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
-              <SectionTitle
-                kicker="Notebook Bio"
-                title="About"
-                subtitle="A full-stack developer focused on building scalable, user-centric applications with clean architecture and real-world impact."
-                accent="red"
-                className={isDark ? "text-white" : "text-black"}
-              />
-
-              <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-                <article className="notebook-page brutal-card relative min-w-0 rotate-0 p-6 sm:-rotate-[1deg] sm:p-8">
-                  <Tape position="left" />
-                  <p className="font-display text-4xl uppercase leading-none sm:text-5xl">Full Stack Development With Real-World Focus.</p>
-                  <div className="mt-6 space-y-5 font-mono text-sm leading-relaxed sm:text-base">
-                    <p>
-                      I am <span className="marker-yellow ml-2">Shashank Singh</span>, a BCA graduate currently pursuing a
-                      <span className="marker-blue ml-2 text-white">Master of Computer Applications (MCA)</span>, with
-                      hands-on experience building full stack web applications using MongoDB, Express.js, React.js, and Node.js.
-                    </p>
-                    <p>
-                      My work includes developing responsive interfaces with React.js, building backend logic with Node.js and
-                      Express.js, and managing data through <span className="marker-red ml-2 text-white">MongoDB and database workflows</span>.
-                    </p>
-                    <p>
-                      I focus on solving real user problems through practical projects, clean REST API integration, and scalable
-                      application structure that supports usability and long-term growth.
-                    </p>
-                  </div>
-                </article>
-
-                <div className="grid min-w-0 gap-5">
-                  {aboutNotes.map((note, index) => (
-                    <motion.article
-                      key={note.title}
-                      whileHover={{ scale: 1.04, rotate: note.hoverRotate }}
-                      whileTap={{ scale: 0.97, y: 2 }}
-                      className={`brutal-card min-w-0 p-5 ${note.surface} ${note.rotation}`}
-                      transition={{ type: "spring", stiffness: 220, damping: 14, delay: index * 0.04 }}
-                    >
-                      <p className={`font-display text-3xl uppercase leading-none ${note.inverted ? "text-white" : ""}`}>{note.title}</p>
-                      <p className={`mt-3 font-mono text-sm leading-relaxed ${note.inverted ? "text-white" : ""}`}>{note.text}</p>
-                    </motion.article>
-                  ))}
-                </div>
-              </div>
-            </motion.section>
-
-            <motion.section id="projects" {...revealProps} className="scroll-mt-28 relative z-10 min-w-0 space-y-6">
-              <div className="project-section-shell w-full max-w-full overflow-hidden px-4 sm:overflow-visible sm:px-6">
-                <SectionTitle
-                  kicker="Scrap Stack"
-                  title="Projects"
-                  subtitle="Selected projects built around full stack development, responsive design, database-backed features, and real-world problem solving."
-                  accent="blue"
-                  className={`${isDark ? "text-white" : "text-black"} ml-2 sm:ml-0`}
-                />
-
-                <div className="mt-6 grid min-w-0 items-start gap-6 xl:grid-cols-2">
-                  {projects.map((project) => (
-                    <ScrapCard
-                      key={project.id}
-                      project={project}
-                      isActive={project.id === activeProjectId}
-                      onToggle={() => setActiveProjectId((current) => (current === project.id ? "" : project.id))}
-                      onFocus={() => setActiveProjectId(project.id)}
-                    />
-                  ))}
-                </div>
-
-                <motion.aside
-                  layout
-                  className="brutal-card mt-6 ml-auto w-full max-w-3xl min-w-0 rotate-0 bg-[#ffe600] p-5 sm:rotate-[1deg]"
-                  whileHover={{ scale: 1.03, rotate: 1.2 }}
-                >
-                  <p className="font-mono text-xs uppercase tracking-[0.28em]">Project Snapshot</p>
-                  <p className="mt-2 break-words font-display text-4xl uppercase leading-none">{activeProject.title}</p>
-                  <p className="mt-3 font-mono text-sm leading-relaxed">{activeProject.impact}</p>
-                </motion.aside>
-              </div>
-            </motion.section>
-
-            <motion.section id="skills" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
-              <SectionTitle
-                kicker="Sticker Sheet"
-                title="Skills"
-                subtitle="Core technologies, programming languages, tools, and frameworks I use to build responsive full stack applications."
-                accent="yellow"
-                className={isDark ? "text-white" : "text-black"}
-              />
-
-              <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,0.75fr)_minmax(0,1.25fr)]">
-                <article className="brutal-card min-w-0 rotate-0 bg-[#ff3b3b] p-6 text-white sm:rotate-[1deg]">
-                  <Tape position="center" />
-                  <p className="font-display text-4xl uppercase leading-none">Technical Skill Groups.</p>
-                  <div className="mt-5 grid gap-3">
-                    {workflowNotes.map((note) => (
-                      <div key={note.title} className="border-4 border-black bg-white px-4 py-3 text-black shadow-[2px_2px_0_#000] sm:shadow-[4px_4px_0_#000]">
-                        <p className="font-display text-2xl uppercase leading-none">{note.title}</p>
-                        <p className="mt-2 font-mono text-sm leading-relaxed">{note.text}</p>
+                <main className="space-y-8 pb-16">
+                  <motion.section id="hero" {...mobileRevealProps} className="space-y-4">
+                    <article className="brutal-card overflow-hidden bg-white p-5">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.24em]">BCA Graduate / Pursuing MCA / MERN Stack Developer</p>
+                      <h2 className="mt-4 break-words font-display text-[clamp(2.4rem,13vw,4.25rem)] uppercase leading-[0.9]">Hi, I&apos;m Shashank<span className="block">Full Stack Developer</span><span className="block text-[#ff3b3b]">I Build Scalable Web Applications</span></h2>
+                      <p className="mt-4 font-mono text-sm leading-relaxed">I build full stack web applications using the <span className="marker-yellow">MERN stack</span>, focused on responsive interfaces, backend logic, REST APIs, and real-world product value.</p>
+                      <div className="mt-5 flex flex-wrap gap-2">{heroBadges.map((badge) => <Sticker key={badge.text} tone={badge.tone}>{badge.text}</Sticker>)}</div>
+                      <div className="mt-5 grid gap-3">
+                        <motion.button type="button" onClick={() => handleNavSelection("projects")} whileTap={{ scale: 0.98, y: 1 }} className="border-4 border-black bg-[#ff3b3b] px-4 py-4 font-display text-sm uppercase tracking-[0.18em] text-white shadow-[2px_2px_0_#000]">See Projects</motion.button>
+                        <motion.a href={`mailto:${contactDetails.email}`} onClick={handleEmailStart} whileTap={{ scale: 0.98, y: 1 }} className="border-4 border-black bg-[#ffe600] px-4 py-4 text-center font-display text-sm uppercase tracking-[0.18em] shadow-[2px_2px_0_#000]">Start A Conversation</motion.a>
                       </div>
-                    ))}
-                  </div>
-                </article>
+                    </article>
 
-                <article className="brutal-card relative min-w-0 bg-white p-6">
-                  <Tape position="left" />
-                  <Tape position="right" />
-                  <div className="flex flex-wrap items-start gap-4">
-                    {skills.map((skill, index) => (
-                      <motion.div
-                        key={skill.label}
-                        animate={{ y: [0, -1.5, 1.5, 0] }}
-                        transition={{ duration: 3.4 + index * 0.14, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <Sticker tone={skill.tone} className={skill.rotation}>
-                          {skill.label}
-                        </Sticker>
-                      </motion.div>
-                    ))}
-                  </div>
-                </article>
-              </div>
-            </motion.section>
+                    <div className="grid grid-cols-2 gap-3">{stats.map((stat, index) => <motion.article key={stat.label} {...mobileRevealProps} className={`brutal-card overflow-hidden p-4 ${index === 2 ? "col-span-2" : ""} ${stat.surface}`}><p className={`font-display text-3xl uppercase leading-none ${stat.inverted ? "text-white" : ""}`}>{stat.value}</p><p className={`mt-2 font-mono text-[10px] uppercase tracking-[0.18em] ${stat.inverted ? "text-white" : ""}`}>{stat.label}</p></motion.article>)}</div>
 
-            <motion.section id="contact" {...revealProps} className="scroll-mt-28 min-w-0 space-y-6">
-              <div className="contact-section-shell w-full max-w-full overflow-hidden px-4 sm:overflow-visible sm:px-6">
-                <SectionTitle
-                  kicker="Pinned Note"
-                  title="Contact"
-                  subtitle="Open to placements, internships, and full stack developer roles. Let&apos;s discuss how I can contribute."
-                  accent="red"
-                  className={isDark ? "text-white" : "text-black"}
-                />
-                <div className="mt-6">
-                  <ContactNote contactDetails={contactDetails} socialLinks={socialLinks} />
-                </div>
-              </div>
-            </motion.section>
-          </main>
+                    <motion.article {...mobileRevealProps} className="brutal-card overflow-hidden bg-[#ffe600] p-5"><p className="font-display text-4xl uppercase leading-none">I Build Scalable, User-Focused Web Applications That Solve Real Problems</p><p className="mt-4 font-mono text-sm leading-relaxed">I develop scalable full-stack applications and live business websites that prioritize usability, responsive design, and reliable engineering for real-world impact.</p></motion.article>
+
+                    <motion.article {...mobileRevealProps} className="brutal-card overflow-hidden bg-white p-5"><p className="font-mono text-xs uppercase tracking-[0.24em]">Currently Focused On</p><div className="mt-4 flex flex-wrap gap-2"><Sticker tone="red">Building Production-Ready Full-Stack Applications</Sticker><Sticker tone="blue">Writing Clean, Maintainable, And Efficient Code</Sticker><Sticker tone="white">Improving Data Structures And Problem-Solving Skills</Sticker><Sticker tone="yellow">Designing User-Focused And Responsive Interfaces</Sticker></div></motion.article>
+                  </motion.section>
+
+                  <motion.section id="about" {...mobileRevealProps} className="space-y-4">
+                    <SectionTitle kicker="Notebook Bio" title="About" subtitle="A full-stack developer focused on building scalable, user-centric applications with clean architecture and real-world impact." accent="red" />
+                    <article className="notebook-page brutal-card overflow-hidden bg-white p-5"><p className="font-display text-4xl uppercase leading-none">Full Stack Development With Real-World Focus.</p><div className="mt-5 space-y-4 font-mono text-sm leading-relaxed"><p>I am <span className="marker-yellow ml-2">Shashank Singh</span>, a BCA graduate currently pursuing a<span className="marker-blue ml-2 text-white">Master of Computer Applications (MCA)</span>, with hands-on experience building full stack web applications using MongoDB, Express.js, React.js, and Node.js.</p><p>My work includes responsive interfaces with React.js, backend logic with Node.js and Express.js, and database handling with <span className="marker-red ml-2 text-white">MongoDB and API-driven workflows</span>.</p></div></article>
+                    <div className="grid gap-4">{aboutNotes.map((note) => <motion.article key={note.title} {...mobileRevealProps} className={`brutal-card overflow-hidden p-5 ${note.surface}`}><p className={`font-display text-3xl uppercase leading-none ${note.inverted ? "text-white" : ""}`}>{note.title}</p><p className={`mt-3 font-mono text-sm leading-relaxed ${note.inverted ? "text-white" : ""}`}>{note.text}</p></motion.article>)}</div>
+                  </motion.section>
+
+                  <section id="projects" className="space-y-4">
+                    <SectionTitle kicker="Scrap Stack" title="Projects" subtitle="Selected projects built around full stack development, responsive design, database-backed features, and real-world problem solving." accent="blue" />
+                    <div className="grid gap-4">{projects.map((project) => <MobileProjectCard key={project.id} project={project} canHover={canHover} />)}</div>
+                  </section>
+
+                  <motion.section id="skills" {...mobileRevealProps} className="space-y-4">
+                    <SectionTitle kicker="Sticker Sheet" title="Skills" subtitle="Core technologies, programming languages, tools, and frameworks I use to build responsive full stack applications." accent="yellow" />
+                    <article className="brutal-card overflow-hidden bg-[#ff3b3b] p-5 text-white"><p className="font-display text-4xl uppercase leading-none">Technical Skill Groups.</p><div className="mt-5 grid gap-3">{workflowNotes.map((note) => <div key={note.title} className="border-4 border-black bg-white px-4 py-3 text-black shadow-[2px_2px_0_#000]"><p className="font-display text-2xl uppercase leading-none">{note.title}</p><p className="mt-2 font-mono text-sm leading-relaxed">{note.text}</p></div>)}</div></article>
+                    <article className="brutal-card overflow-hidden bg-white p-5"><div className="flex flex-wrap gap-3">{skills.map((skill) => <Sticker key={skill.label} tone={skill.tone}>{skill.label}</Sticker>)}</div></article>
+                  </motion.section>
+
+                  <motion.section id="contact" {...mobileRevealProps} className="space-y-4">
+                    <SectionTitle kicker="Pinned Note" title="Contact" subtitle="Open to placements, internships, and full stack developer roles. Let&apos;s discuss how I can contribute." accent="red" />
+                    <MobileContactCard canHover={canHover} onEmailStart={handleEmailStart} onSocialLinkClick={handleSocialLinkClick} />
+                  </motion.section>
+                </main>
+              </>
+            ) : (
+              <DesktopPortfolio
+                activeProjectId={activeProjectId}
+                canHover={canHover}
+                isDark={isDark}
+                handleEmailStart={handleEmailStart}
+                handleSocialLinkClick={handleSocialLinkClick}
+                setActiveProjectId={setActiveProjectId}
+                toggleDarkMode={() => setIsDark((value) => !value)}
+                scrollToSection={scrollToSection}
+              />
+            )}
           </div>
         </div>
       </div>
