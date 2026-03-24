@@ -155,12 +155,26 @@ export default function App() {
   }, []);
 
   const scrollToSection = (sectionId) => {
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const section = document.getElementById(sectionId);
+
+    if (!section) {
+      return;
+    }
+
+    const top = Math.max(section.getBoundingClientRect().top + window.scrollY - 12, 0);
+    window.scrollTo({ top, behavior: "smooth" });
   };
 
   const handleNavSelection = (sectionId) => {
+    if (isMobileViewport) {
+      setIsMobileMenuOpen(false);
+      window.setTimeout(() => {
+        scrollToSection(sectionId);
+      }, 320);
+      return;
+    }
+
     scrollToSection(sectionId);
-    setIsMobileMenuOpen(false);
   };
 
   const handleEmailStart = (event) => {
